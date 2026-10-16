@@ -39,6 +39,7 @@ import { toolResult } from "./tool-result.js";
 // previous connection can still fetch its template after a later app release.
 export const READING_NEST_URI = READING_NEST_RESOURCE_URI;
 export const READING_NEST_LEGACY_URIS = [
+  "ui://ss-reading-nest/app-v84-pinned-reader-companion.html",
   "ui://ss-reading-nest/app-v83-native-inline.html",
   "ui://ss-reading-nest/app-v78-context-fallback-remount.html",
   "ui://ss-reading-nest/app-v76-ios-remount.html",
@@ -118,7 +119,7 @@ const readSharedPageContextInputSchema = z
 
 export const TOOL_CONFIGS = {
   open_reading_nest: {
-    title: "打开 鼠兔和家机的书屋",
+    title: "打开 鼠鼠与纪清和的书屋",
     description: "Use this when the user wants to open the reading nest or continue recent reading.",
     inputSchema: openReadingNestInputSchema,
     annotations: readOnly,
@@ -133,7 +134,7 @@ export const TOOL_CONFIGS = {
   read_shared_page_context: {
     title: "共读当前书页与鼠鼠的想法",
     description:
-      "必须在鼠鼠要求共读当前页时调用。触发语包括：和家机共读、读这一页、刚读完第几页、看看这一页、读取我保存的想法、聊聊当前内容。即使阅读组件已经打开，也要立即调用本工具读取当前页正文和鼠鼠保存的想法；不要等待组件再次推送，不要声称拿不到内容。读取后直接回应鼠鼠的想法，不要复述或概括整页，也不要逐条转抄想法。",
+      "必须在鼠鼠要求共读当前页时调用。触发语包括：和纪清和共读、和家机共读（旧称）、读这一页、刚读完第几页、看看这一页、读取我保存的想法、聊聊当前内容。即使阅读组件已经打开，也要立即调用本工具读取当前页正文和鼠鼠保存的想法；不要等待组件再次推送，不要声称拿不到内容。读取后直接回应鼠鼠的想法，不要复述或概括整页，也不要逐条转抄想法。",
     inputSchema: readSharedPageContextInputSchema,
     annotations: readOnly
   },
@@ -145,9 +146,9 @@ export const TOOL_CONFIGS = {
     _meta: appOnlyToolMeta
   },
   check_reading_nest_app_compatibility: {
-    title: "检查 鼠兔和家机的书屋 App 兼容性",
+    title: "检查 鼠鼠与纪清和的书屋 App 兼容性",
     description:
-      "Use this only to verify whether the current ChatGPT client can render a minimal 鼠兔和家机的书屋 App component. It does not read or modify any book data.",
+      "Use this only to verify whether the current ChatGPT client can render a minimal 鼠鼠与纪清和的书屋 App component. It does not read or modify any book data.",
     inputSchema: z.object({}),
     annotations: readOnly,
     _meta: {
@@ -177,7 +178,7 @@ export const TOOL_CONFIGS = {
     _meta: appOnlyToolMeta
   },
   confirm_assistant_synced_position: {
-    title: "确认家机已读位置",
+    title: "确认纪清和已读位置",
     description:
       "Use this only after the user explicitly confirms that ChatGPT replied it has read through a batch end.",
     inputSchema: confirmAssistantSyncedPositionInputSchema,
@@ -386,7 +387,7 @@ export function registerReadingTools(
     return {
       ...toolResult(
         summarizeNovelBookshelfForModel(bookshelf.bookshelfSessions),
-        "已打开 鼠兔和家机的书屋。完整书架只显示在阅读组件内。后续如果鼠鼠要求共读、讨论当前页或读取已保存的想法，必须立即调用 read_shared_page_context；不要等待阅读组件再次推送内容。"
+        "已打开 鼠鼠与纪清和的书屋。完整书架只显示在阅读组件内。后续如果鼠鼠要求共读、讨论当前页或读取已保存的想法，必须立即调用 read_shared_page_context；不要等待阅读组件再次推送内容。"
       ),
       _meta: { privateBookshelf: bookshelf }
     };
@@ -530,7 +531,7 @@ export function registerReadingTools(
           confirmedBatchId: input.batchId,
           updatedAt: session.updatedAt
         },
-        `已由鼠鼠确认家机读到${input.confirmedPosition.label}。`
+        `已由鼠鼠确认纪清和读到${input.confirmedPosition.label}。`
       );
     }
   );

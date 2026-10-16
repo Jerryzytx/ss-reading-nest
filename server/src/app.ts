@@ -29,7 +29,7 @@ export function createApp() {
     response.set("cache-control", "no-store");
     response.json({
       ok: true,
-      app: "鼠兔和家机的书屋",
+      app: "鼠鼠与纪清和的书屋",
       version: READING_NEST_APP_VERSION
     });
   });

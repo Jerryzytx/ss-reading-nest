@@ -1083,7 +1083,7 @@ export function App() {
         return;
       }
       if (startUnavailable) {
-        setToast("已进入本地阅读模式；家机陪读与云端同步需在 ChatGPT 内使用。");
+        setToast("已进入本地阅读模式；纪清和陪读与云端同步需在 ChatGPT 内使用。");
       } else if (cloudUploadFailed) {
         setToast(`云端同步失败：${cloudUploadError}；已保留本设备正文。`);
       }
@@ -1268,7 +1268,7 @@ export function App() {
       });
       setToast(
         mode === "context"
-          ? `已同步${sessionBundle.session.userCurrentPosition.label}，家机正在看这里。`
+          ? `已同步${sessionBundle.session.userCurrentPosition.label}，纪清和正在看这里。`
           : "已用兼容模式发送当前页。"
       );
     } finally {
@@ -1328,7 +1328,7 @@ export function App() {
         sendMessage: sendCompanionMessage,
         scrollToBottom: false
       });
-      setToast("这一页和鼠鼠的想法已经发给家机。你可以继续往下读。");
+      setToast("这一页和鼠鼠的想法已经发给纪清和。你可以继续往下读。");
     } finally {
       setSyncRequestInFlight(false);
     }
@@ -1376,7 +1376,7 @@ export function App() {
         sendMessage: sendCompanionMessage,
         scrollToBottom: false
       });
-      setToast("只把这句和鼠鼠的问题发给了家机。");
+      setToast("只把这句和鼠鼠的问题发给了纪清和。");
     } finally {
       setSyncRequestInFlight(false);
     }
@@ -1483,7 +1483,7 @@ export function App() {
       if (confirmed.mode === "live_reading") {
         clearSyncJobState();
         await cache.removeSyncJob(syncJob.sessionId).catch(() => undefined);
-        setToast(`已确认家机读到第 ${batch.rangeEnd} 页。`);
+        setToast(`已确认纪清和读到第 ${batch.rangeEnd} 页。`);
         return;
       }
       const formalMode = sessionBundle.session.sessionPreferences.readingCommentMode;
@@ -1514,7 +1514,7 @@ export function App() {
       });
       clearSyncJobState();
       await cache.removeSyncJob(syncJob.sessionId).catch(() => undefined);
-      setToast("家机追上你啦，可以正式陪读了。");
+      setToast("纪清和追上你啦，可以正式陪读了。");
       return;
     }
     storeSyncJob(confirmed);
@@ -2027,7 +2027,7 @@ export function App() {
             </div>
           <label className="remember-row"><input type="checkbox" checked={remembered} onChange={(e) => setRemembered(e.target.checked)} />在本设备记住这本书</label>
           <p className="privacy-note">
-            正文会保存到你的私人云端，供手机和电脑续读；不会自动发给 ChatGPT。只有点“问家机”或“和家机一起看这页”时，选中句子或当前页才会发送。
+            正文会保存到你的私人云端，供手机和电脑续读；不会自动发给 ChatGPT。只有点“问纪清和”或“和纪清和一起看这页”时，选中句子或当前页才会发送。
           </p>
           <button
             className="action-primary wide-button"

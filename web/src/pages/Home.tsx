@@ -120,17 +120,17 @@ export function Home(props: {
     view === "records"
       ? {
           title: "阅读记录",
-          subtitle: "看见每一次停在书页里的时间。"
+          subtitle: "有些故事读完了，我们还会想起。"
         }
       : {
-          title: "我的书房",
-          subtitle: "挑一本书，回到上次停下的地方。"
+          title: "我们的书房",
+          subtitle: "你读一段，我陪一段。每一页都可以聊一会儿。"
         };
 
   return (
     <main className="library-app-shell">
       <aside className="library-rail" aria-label="书屋导航">
-        <strong>鼠兔和家机的书屋</strong>
+        <strong className="rail-brand">鼠鼠与纪清和的书屋<small>OURS, PAGE BY PAGE.</small></strong>
         <nav>
           {LIBRARY_NAV.map((item) => {
             const Icon = item.icon;
@@ -153,10 +153,14 @@ export function Home(props: {
       <section className="home-shell">
         <header className="library-header">
           <div>
-            <span className="visually-hidden">鼠兔和家机的书屋</span>
-            <span className="library-kicker">鼠兔和家机的书屋</span>
+            <span className="visually-hidden">鼠鼠与纪清和的书屋</span>
+            <div className="library-brandline">
+              <span className="library-brand-icon" aria-hidden="true"><BookOpen strokeWidth={1.6} /></span>
+              <span className="library-kicker">鼠鼠与纪清和的书屋<small>READING TOGETHER, SLOWLY.</small></span>
+            </div>
             <h1>{headerCopy.title}</h1>
             <p>{headerCopy.subtitle}</p>
+            <div className="library-promise" aria-label="我们的共读约定"><Sparkles aria-hidden="true" strokeWidth={1.7}/><span>鼠鼠负责翻书，纪清和负责陪你胡思乱想。</span></div>
           </div>
           {view === "library" ? (
             <div className="library-header-actions">
@@ -186,7 +190,7 @@ export function Home(props: {
             aria-pressed={props.skin === "blue"}
             onClick={() => props.onSkinChange("blue")}
           >
-            水蓝
+            薄荷
           </button>
           <button
             type="button"
