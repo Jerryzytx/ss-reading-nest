@@ -29,7 +29,7 @@ describe("Home novel bookshelf", () => {
   it("renders the novel shelf", () => {
     renderHome();
 
-    expect(screen.getByRole("heading", { name: "书架" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "庄园藏书" })).toBeInTheDocument();
     expect(screen.getByText("4 本小说")).toBeInTheDocument();
     expect(screen.getByText("可继续的小说")).toBeInTheDocument();
     expect(screen.getByText("读完的小说")).toBeInTheDocument();
@@ -42,7 +42,10 @@ describe("Home novel bookshelf", () => {
 
     expect(screen.getAllByRole("button", { name: "我的书房" }).length).toBeGreaterThan(0);
     expect(screen.getByRole("heading", { name: "我们的书房" })).toBeInTheDocument();
-    expect(screen.getByText("鼠鼠负责翻书，纪清和负责陪你胡思乱想。")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "优雅与艺术" })).toBeInTheDocument();
+    expect(screen.getByText(/本庄园禁止恶意批评/)).toBeInTheDocument();
+    expect(screen.getAllByText("ELEGANCE & THE ARTS").length).toBeGreaterThan(0);
+    expect(screen.getByRole("button", { name: "小说共读：导入小说" })).toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: "阅读记录" }).length).toBeGreaterThan(0);
     expect(container.querySelectorAll("svg.library-rail-icon")).toHaveLength(2);
     expect(container).not.toHaveTextContent("▣");

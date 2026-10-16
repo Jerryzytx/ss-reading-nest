@@ -28,7 +28,7 @@ describe("App", () => {
     render(<App />);
     expect(screen.getAllByText("鼠鼠与纪清和的书屋").length).toBeGreaterThan(0);
     expect(screen.getByRole("button", { name: /小说共读/ })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "书架" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "庄园藏书" })).toBeInTheDocument();
   });
 
   it("recovers the novel shelf when the opening result arrives late", async () => {
@@ -384,7 +384,7 @@ describe("App", () => {
 
     render(<App />);
 
-    expect(screen.getByRole("heading", { name: "书架" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "庄园藏书" })).toBeInTheDocument();
     expect(screen.getByText("正在找回你的小说书架…")).toBeInTheDocument();
   });
 
@@ -417,7 +417,7 @@ describe("App", () => {
 
     render(<App />);
 
-    expect(screen.getByRole("heading", { name: "书架" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "庄园藏书" })).toBeInTheDocument();
     expect(await screen.findByText("第二页。")).toBeInTheDocument();
     await deviceCache.remove("late-reader-session");
   });
