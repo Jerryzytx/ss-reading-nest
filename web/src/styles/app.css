@@ -2593,3 +2593,106 @@ html[data-display-mode="fullscreen"] .app {
 @media (prefers-reduced-motion: reduce) {
   .library-book-card .library-cover { transition: none; }
 }
+
+
+/* Reader usability: accessible type settings and a mobile-friendly paragraph
+   picker supplement native text selection instead of replacing it. */
+.reader-reading-tools {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  width: min(100%, 720px);
+  margin: 0 auto 9px;
+  padding: 5px 4px;
+  border: 1px solid color-mix(in srgb, var(--champagne) 24%, var(--line));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
+  backdrop-filter: blur(10px);
+}
+.reader-reading-tools button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 37px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--blue-strong);
+  font-size: 12px;
+  font-weight: 650;
+}
+.reader-reading-tools button[aria-pressed="true"],
+.reader-reading-tools button[aria-expanded="true"] {
+  border-color: color-mix(in srgb, var(--champagne) 57%, var(--line));
+  background: color-mix(in srgb, var(--sage) 48%, var(--surface));
+}
+.reader-reading-tools svg { width: 17px; height: 17px; }
+.reader-typography-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  width: min(100%, 720px);
+  margin: 0 auto 10px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.reader-typography-controls span { margin-right: auto; color: var(--muted); font-size: 12px; }
+.reader-typography-controls button {
+  min-width: 42px;
+  min-height: 40px;
+  padding: 5px 7px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.reader-typography-controls button:disabled { opacity: .4; }
+.reader-typography-controls output { min-width: 35px; text-align: center; font-size: 12px; }
+.reader-tap-hint {
+  width: min(100%, 720px);
+  margin: 8px auto 10px;
+  padding: 7px 10px;
+  border-left: 2px solid var(--champagne);
+  background: color-mix(in srgb, var(--sage) 24%, var(--paper));
+  color: var(--muted);
+  font-size: 12px;
+}
+.novel-paper, .novel-paper p {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+.novel-paper .reader-annotatable-paragraph {
+  padding: 9px 12px;
+  border: 1px dashed color-mix(in srgb, var(--champagne) 60%, var(--line));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--sage) 15%, transparent);
+  cursor: pointer;
+}
+.novel-paper .reader-annotatable-paragraph:focus-visible {
+  outline: 2px solid var(--blue-strong);
+  outline-offset: 2px;
+}
+.reader-immersive,
+:root[data-host-embedding="embedded"][data-display-mode="inline"] .reader-shell.reader-immersive {
+  width: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  box-shadow: none;
+}
+.reader-shell:has(.reader-reading-tools) { min-width: 0; }
+@media (max-width: 699px) {
+  .reader-reading-tools { margin-bottom: 6px; }
+  .reader-reading-tools button { font-size: 11px; padding: 6px 8px; }
+  .reader-typography-controls { flex-wrap: wrap; }
+  .reader-typography-controls button { min-height: 42px; }
+  .reader-immersive .reader-scroll { padding-inline: 12px; }
+}
