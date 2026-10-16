@@ -1299,7 +1299,7 @@ export function App() {
     );
     const sourceContext = getSourceContext(sessionBundle.session.sourceManifest);
     const prompt = [
-      `我读到了《${sessionBundle.session.title}》第 ${currentPosition.index} 页。请把第 ${rangeStart} 页到这里连起来一起读、一起聊，不要只看孤立的这一页。`,
+      `我读到了《${sessionBundle.session.title}》第 ${currentPosition.index} 页，想和你一起聊聊。请把第 ${rangeStart} 页到这里连起来一起读、一起聊，不要只看孤立的这一页。`,
       savedThoughts
         ? "请先读取我刚分享的连续几页和保存的批注，接住我的想法，再聊你最在意的 1-2 个细节。"
         : "请先读取刚分享的连续几页，结合前后情节一起聊，挑 1-3 个值得八卦的细节。",
