@@ -73,23 +73,24 @@ html[data-display-mode="fullscreen"] .app {
   min-height: 100dvh;
 }
 .library-theme-blue {
-  --cream: #eff7f2;
-  --paper: #fffdf8;
-  --surface: #fffefa;
-  --sage: #dceee5;
-  --sage-strong: #477667;
-  --wood: #6c9c8c;
-  --blue: #a8d3c0;
-  --blue-strong: #376b5b;
-  --blue-soft: #e5f3ea;
-  --blush: #f8ece4;
-  --champagne: #d7b989;
-  --rose-shadow: #749988;
-  --ink: #2d453e;
-  --muted: #688077;
-  --line: #d9e7dd;
+  /* "庄园" is the default skin; keep the historic blue key for saved preferences. */
+  --cream: #f2eee5;
+  --paper: #fffaf0;
+  --surface: #fffdf6;
+  --sage: #e4e7d9;
+  --sage-strong: #66775c;
+  --wood: #775c47;
+  --blue: #b7b995;
+  --blue-strong: #34584c;
+  --blue-soft: #ececde;
+  --blush: #efe5d5;
+  --champagne: #b79a63;
+  --rose-shadow: #716350;
+  --ink: #293d35;
+  --muted: #7a7c6d;
+  --line: #e3dbc8;
   --danger: #ad5b55;
-  --accent-gradient: linear-gradient(130deg, #376c5a 0%, #639d89 100%);
+  --accent-gradient: linear-gradient(135deg, #284a3d 0%, #456758 100%);
 }
 .library-theme-pink {
   --cream: #fff8f5;
@@ -2136,4 +2137,457 @@ html[data-display-mode="fullscreen"] .app {
 }
 @media (prefers-reduced-motion: reduce) {
   button { transition: none; }
+}
+
+
+/* ELEGANCE & THE ARTS — a private Georgian estate reading room.
+   Decorative scenes are CSS/SVG only; nothing external blocks reading. */
+.library-app-shell { gap: 32px; }
+.app {
+  background:
+    radial-gradient(ellipse 72% 48% at 92% 2%, color-mix(in srgb, var(--sage) 45%, transparent), transparent 83%),
+    repeating-linear-gradient(90deg, transparent 0, transparent 139px, color-mix(in srgb, var(--wood) 3%, transparent) 140px),
+    var(--cream);
+}
+.library-rail {
+  gap: 11px;
+  padding: 22px 13px 17px;
+  border: 1px solid #416052;
+  border-radius: 14px;
+  background:
+    linear-gradient(150deg, #25483d, #1d382f 75%),
+    #25483d;
+  box-shadow: 0 17px 38px rgba(35, 42, 27, .14);
+  color: #f8f0dc;
+  text-align: center;
+}
+.estate-rail-monogram {
+  display: grid;
+  place-items: center;
+  width: 66px;
+  height: 66px;
+  margin: 3px auto 1px;
+  border: 1px solid rgba(223, 199, 139, .6);
+  outline: 1px solid rgba(223, 199, 139, .24);
+  outline-offset: -6px;
+  border-radius: 50%;
+  color: #e6d5a3;
+  font: 26px/.9 Georgia, "Times New Roman", serif;
+  letter-spacing: -.09em;
+}
+.estate-rail-monogram span { font-size: 14px; letter-spacing: 0; }
+.library-rail .rail-brand {
+  color: #fff8e9;
+  padding: 4px 2px 6px;
+  font-family: "Songti SC", "STSong", Georgia, serif;
+  font-weight: 660;
+  font-size: 19px;
+  letter-spacing: .09em;
+}
+.library-rail .rail-brand small {
+  color: #ccbd95;
+  margin-top: 10px;
+  font: 9px/1.6 Georgia, serif;
+  letter-spacing: .105em;
+}
+.estate-rail-owner {
+  color: #bdc5b5;
+  font-size: 10px;
+  letter-spacing: .12em;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(224, 205, 165, .21);
+}
+.library-rail nav { margin-top: 8px; }
+.library-rail-item {
+  background: transparent;
+  border-color: transparent;
+  border-radius: 7px;
+  color: #c5d2c5;
+}
+.library-rail-item .library-rail-icon { color: #c8bd92; }
+.library-rail-item[aria-current="page"] {
+  border-color: rgba(222, 198, 147, .35);
+  background: rgba(255, 251, 235, .11);
+  color: #fffcf0;
+}
+.library-rail-item[aria-current="page"] .library-rail-icon { color: #e1d09d; }
+.library-rail-item:focus-visible { outline-color: #e1d09d; }
+.estate-library-header { display: grid; grid-template-columns: minmax(0, 1fr); gap: 21px; padding: 0 0 10px; }
+.estate-hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-items: center;
+  min-height: 310px;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid #183f31;
+  background:
+    radial-gradient(ellipse at 81% 16%, rgba(171, 154, 110, .19), transparent 47%),
+    linear-gradient(115deg, #203e34 0%, #294e3f 52%, #193c32 100%);
+  color: #fff7e5;
+  box-shadow: 0 20px 45px rgba(51, 55, 40, .16);
+}
+.estate-hero::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 10px;
+  border: 1px solid rgba(216, 188, 126, .38);
+  border-radius: 11px;
+  pointer-events: none;
+}
+.estate-hero::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(27, 54, 44, .98) 0%, rgba(27, 54, 44, .94) 33%, rgba(27, 54, 44, .14) 100%),
+    repeating-linear-gradient(0deg, transparent 0 25px, rgba(232, 209, 168, .021) 26px);
+  pointer-events: none;
+}
+.estate-manor-art {
+  position: absolute;
+  z-index: 0;
+  top: 25px;
+  right: -55px;
+  width: min(76%, 680px);
+  height: calc(100% - 42px);
+  color: #d8bd83;
+  opacity: .94;
+  pointer-events: none;
+}
+.estate-hero-content {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  justify-items: start;
+  padding: 30px 40px;
+  max-width: 585px;
+}
+.estate-hero-eyebrow {
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  width: min(100%, 360px);
+  margin-bottom: 18px;
+  color: #c5bd9d;
+  font: 10px/1.5 Georgia, serif;
+  letter-spacing: .15em;
+}
+.estate-hero-crest {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(222, 192, 125, .6);
+  color: #ead6a1;
+}
+.estate-hero-crest svg { width: 24px; height: 24px; }
+.estate-hero h1 {
+  margin: 8px 0 0;
+  color: #fff7e7;
+  font-family: "Songti SC", "STSong", "Noto Serif CJK SC", Georgia, serif;
+  font-size: clamp(36px, 5.3vw, 64px);
+  font-weight: 590;
+  line-height: 1.15;
+  letter-spacing: .14em;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, .08);
+}
+.estate-hero-english {
+  margin: 9px 0 0;
+  color: #decba0;
+  font: 13px/1.65 Georgia, "Times New Roman", serif;
+  letter-spacing: .22em;
+}
+.estate-hero-ornament {
+  display: block;
+  width: min(290px, 100%);
+  margin: 15px 0 11px;
+  color: #dbbd7f;
+  font-size: 11px;
+  text-align: center;
+  background: linear-gradient(90deg, transparent 0%, rgba(220, 192, 124, .7) 28%, transparent 28% 72%, rgba(220, 192, 124, .7) 72%, transparent 100%) center / 100% 1px no-repeat;
+}
+.estate-hero-motto { margin: 0; font-size: 14px; line-height: 1.7; letter-spacing: .035em; }
+.estate-hero-signature {
+  display: block;
+  margin-top: 20px;
+  color: #cabc98;
+  font: 10px/1.5 Georgia, serif;
+  letter-spacing: .09em;
+}
+.estate-room-row { display: flex; align-items: end; justify-content: space-between; gap: 16px; }
+.estate-room-heading { min-width: 0; }
+.estate-room-kicker {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--blue-strong);
+  font: 11px/1.5 Georgia, serif;
+  letter-spacing: .14em;
+}
+.estate-room-heading h2 {
+  margin: 0 0 5px;
+  color: var(--ink);
+  font: 600 29px/1.25 "Songti SC", "STSong", Georgia, serif;
+}
+.estate-room-heading p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+.estate-room-row .library-header-actions { display: flex; justify-content: end; padding-bottom: 3px; }
+.estate-room-row .library-header-actions button { min-height: 40px; }
+.estate-etiquette {
+  display: flex;
+  align-items: start;
+  gap: 10px;
+  margin: 6px 0 12px;
+  padding: 11px 16px;
+  border: 1px solid color-mix(in srgb, var(--champagne) 33%, var(--line));
+  border-left: 3px solid var(--champagne);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--surface) 83%, var(--blush));
+  color: #716a55;
+  font-size: 12px;
+  line-height: 1.75;
+}
+.estate-etiquette svg { width: 18px; height: 18px; flex: none; color: var(--blue-strong); margin-top: 2px; }
+.estate-etiquette strong { margin-right: 6px; color: var(--blue-strong); font-weight: 760; }
+.library-skin-switch { margin: -1px 0 24px; }
+.library-skin-switch span { letter-spacing: .06em; }
+.library-add, .action-primary { background: var(--accent-gradient); }
+.library-book-grid { gap: 22px 16px; }
+.library-cover {
+  color: #fff4df;
+  border: 1px solid rgba(209, 177, 116, .34);
+  border-radius: 6px 11px 11px 6px;
+  background: linear-gradient(132deg, #244a3d, #3d5a46 74%, #223e32);
+  box-shadow: -5px 5px 0 rgba(70, 59, 41, .15), 0 15px 23px rgba(60, 49, 35, .17);
+  transform-origin: left bottom;
+}
+.library-cover::before {
+  z-index: 1;
+  top: 9px;
+  bottom: 9px;
+  left: 10px;
+  width: 2px;
+  border-radius: 0;
+  background: linear-gradient(180deg, transparent, rgba(227, 197, 132, .89), transparent);
+}
+.library-cover::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  inset: 12px 10px 12px 16px;
+  border: 1px solid rgba(232, 203, 153, .48);
+  border-radius: 3px;
+}
+.library-cover-1 { background: linear-gradient(138deg, #784f4a, #925f58 72%, #623e39); }
+.library-cover-2 { background: linear-gradient(138deg, #3c4b63, #53647b 72%, #303f51); }
+.library-cover-3 { background: linear-gradient(138deg, #665642, #867250 72%, #5a4938); }
+.library-cover-4 { background: linear-gradient(138deg, #525b46, #69775a 72%, #3b4839); }
+.library-cover-5 { background: linear-gradient(138deg, #59475b, #746079 72%, #463848); }
+.library-cover-title { z-index: 1; color: #fff6e6; text-shadow: 0 2px 8px rgba(0,0,0,.16); }
+.library-cover-mark {
+  left: 19px;
+  bottom: 20px;
+  max-width: calc(100% - 28px);
+  color: #e6cca0;
+  font: 8px/1.5 Georgia, serif;
+  letter-spacing: .08em;
+}
+.library-book-card:not(:disabled):hover .library-cover {
+  transform: rotate(-2deg) translateY(-2px);
+  box-shadow: -6px 6px 0 rgba(70,59,41,.16), 0 22px 32px rgba(60,49,35,.22);
+}
+.continue-card {
+  border-color: color-mix(in srgb, var(--champagne) 35%, var(--line));
+  border-radius: 11px;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--blush) 32%, var(--surface)), var(--surface));
+}
+.continue-card::before { width: 3px; background: var(--champagne); }
+.continue-status { background: #ebe8d6; color: #526b50; }
+.continue-progress-track span { background: var(--blue-strong); }
+.section-heading h2 { font-size: 25px; }
+.section-heading::after { content: "✦"; color: var(--champagne); margin-right: auto; opacity: .7; }
+.cover-shell { background: transparent; }
+.cover-toolbar { color: var(--blue-strong); font-family: "Songti SC", "STSong", serif; letter-spacing: .08em; }
+.cover-stage {
+  overflow: hidden;
+  border-color: color-mix(in srgb, var(--champagne) 36%, var(--line));
+  border-radius: 14px;
+  background:
+    radial-gradient(ellipse at 9% 12%, rgba(201, 179, 135, .17), transparent 45%),
+    repeating-linear-gradient(90deg, transparent 0 48px, rgba(131, 104, 67, .018) 49px),
+    var(--surface);
+}
+.cover-book {
+  border: 1px solid rgba(210, 188, 133, .7);
+  border-radius: 7px 15px 15px 7px;
+  background: linear-gradient(133deg, #254e3e 0%, #345c49 58%, #1c3f33 100%);
+  box-shadow: -9px 10px 0 rgba(90, 71, 42, .15), 0 24px 48px rgba(25, 45, 34, .23);
+  color: #fdf3dc;
+}
+.cover-book::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 12px 12px 12px 22px;
+  border: 1px solid rgba(224, 200, 144, .52);
+  border-radius: 3px 8px 8px 3px;
+}
+.cover-book::before { background: rgba(222, 183, 118, .72); }
+.cover-book strong { position: relative; z-index: 1; color: #fff7e9; }
+.cover-book small { position: relative; z-index: 1; color: #e2cda3; }
+.cover-book-kicker {
+  position: relative;
+  z-index: 1;
+  color: #dfc99d;
+  font: 10px/1.7 Georgia, serif;
+  letter-spacing: .08em;
+}
+.cover-estate-seal {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 61px;
+  height: 61px;
+  margin-bottom: -6px;
+  border: 1px solid rgba(234, 210, 158, .65);
+  border-radius: 50%;
+  color: #f4e5bf;
+  font: 21px/1 Georgia, serif;
+}
+.cover-estate-seal small { font-size: 13px; }
+.cover-details-kicker { font: 10px/1.6 Georgia, serif; letter-spacing: .13em; }
+.book-archive { border-radius: 13px; }
+.archive-entry, .archive-tabs button { border-radius: 8px; }
+.reader-shell { background: var(--paper); }
+.reader-header {
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--champagne) 39%, var(--line));
+}
+.reader-heading strong { font-family: "Songti SC", "STSong", serif; font-weight: 700; }
+.sync-status {
+  background: color-mix(in srgb, var(--surface) 62%, var(--sage));
+  border-bottom-color: var(--line);
+}
+.reader-companion-bar {
+  gap: 11px;
+  min-height: 56px;
+  padding: 8px max(14px, var(--safe-left)) 8px max(14px, var(--safe-right));
+  border-bottom: 1px solid color-mix(in srgb, var(--champagne) 45%, var(--line));
+  background: linear-gradient(90deg, #f2eddf, #faf6ec);
+  color: #334a3c;
+}
+.reader-companion-emblem {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(112, 99, 63, .36);
+  border-radius: 50%;
+  color: #715d3f;
+}
+.reader-companion-emblem svg { width: 18px; height: 18px; }
+.reader-companion-copy {
+  display: grid;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.3;
+}
+.reader-companion-copy strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; font-weight: 750; }
+.reader-companion-copy small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #827e69; font: 9px/1.5 Georgia, serif; letter-spacing: .06em; }
+.reader-companion-bar button {
+  flex: none;
+  min-height: 34px;
+  border: 1px solid rgba(110, 91, 53, .34);
+  border-radius: 4px;
+  padding: 6px 10px;
+  color: #375447;
+  background: #fffaf0;
+  font-size: 11px;
+  letter-spacing: .04em;
+}
+.reader-companion-bar.is-lady {
+  background: linear-gradient(95deg, #274b3c, #1d3a31);
+  border-bottom-color: #bda16c;
+  color: #fff6dc;
+}
+.reader-companion-bar.is-lady .reader-companion-emblem { color: #e6cd98; border-color: rgba(227, 199, 143, .53); }
+.reader-companion-bar.is-lady .reader-companion-copy small { color: #dfcea8; }
+.reader-companion-bar.is-lady button { background: rgba(255, 249, 227, .08); color: #fff3d8; border-color: rgba(224,198,140,.55); }
+.reader-companion-bar.is-lady button[aria-pressed="true"] { color: #fff3d8; border-color: #d2b77a; }
+.reader-scroll {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--sage) 11%, transparent) 0%, transparent 8%, transparent 92%, color-mix(in srgb, var(--sage) 11%, transparent) 100%),
+    var(--paper);
+}
+.novel-paper {
+  padding-top: 34px;
+  border-top: 1px solid color-mix(in srgb, var(--champagne) 36%, var(--line));
+  color: #342f28;
+}
+.novel-paper::before {
+  display: block;
+  content: "✦";
+  margin: -21px 0 22px;
+  color: var(--champagne);
+  text-align: center;
+  font-size: 11px;
+  line-height: 1;
+}
+.reader-actions { background: color-mix(in srgb, var(--paper) 96%, transparent); border-top-color: var(--line); }
+.reader-actions .action-primary { background: var(--accent-gradient); }
+.novel-paper mark, .quote-highlight { background: rgba(205, 177, 110, .32); }
+@media (max-width: 900px) {
+  .estate-room-row .library-header-actions { justify-content: flex-end; }
+}
+@media (max-width: 699px) {
+  .library-app-shell { padding-inline: 12px; }
+  .estate-library-header { gap: 16px; padding-bottom: 4px; }
+  .estate-hero { min-height: 275px; border-radius: 13px; }
+  .estate-hero::before { inset: 7px; border-radius: 8px; }
+  .estate-hero-content { padding: 24px 23px; }
+  .estate-hero-eyebrow { gap: 8px; margin-bottom: 12px; font-size: 8px; letter-spacing: .055em; }
+  .estate-hero-crest { width: 37px; height: 37px; margin-bottom: 3px; }
+  .estate-hero-crest svg { width: 21px; height: 21px; }
+  .estate-hero h1 { font-size: 39px; letter-spacing: .12em; }
+  .estate-hero-english { font-size: 10px; letter-spacing: .15em; }
+  .estate-hero-ornament { max-width: 240px; margin: 12px 0 9px; }
+  .estate-hero-motto { max-width: 300px; font-size: 12px; }
+  .estate-hero-signature { margin-top: 14px; font-size: 8px; letter-spacing: .04em; }
+  .estate-manor-art { top: 27px; width: 104%; right: -35%; height: 90%; opacity: .56; }
+  .estate-hero::after { background: linear-gradient(90deg, rgba(27,54,44,.95), rgba(27,54,44,.89) 38%, rgba(27,54,44,.33)); }
+  .estate-room-row { align-items: start; }
+  .estate-room-heading h2 { font-size: 25px; }
+  .estate-room-heading p { font-size: 12px; }
+  .estate-room-kicker { font-size: 9px; }
+  .estate-room-row .library-header-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; }
+  .estate-room-row .library-header-actions button { font-size: 11px; padding-inline: 10px; }
+  .estate-etiquette { margin-top: 8px; font-size: 11px; padding: 9px 12px; }
+  .library-skin-switch { margin-bottom: 20px; }
+  .library-book-grid { gap: 18px 12px; }
+  .library-cover { min-height: 162px; }
+  .library-cover-mark { bottom: 19px; font-size: 7px; letter-spacing: 0; }
+  .reader-companion-bar { min-height: 51px; gap: 8px; padding-inline: 9px; }
+  .reader-companion-emblem { width: 31px; height: 31px; }
+  .reader-companion-copy strong { font-size: 11px; }
+  .reader-companion-copy small { font-size: 8px; }
+  .reader-companion-bar button { min-height: 31px; padding: 6px 8px; font-size: 10px; }
+  .reader-scroll { padding-inline: 17px; }
+  .novel-paper { padding-top: 25px; }
+  .novel-paper::before { margin-top: -16px; margin-bottom: 16px; }
+}
+@media (max-width: 430px) {
+  .estate-room-row { flex-wrap: wrap; }
+  .estate-room-row .library-header-actions { justify-content: flex-start; width: 100%; }
+  .estate-hero-signature { max-width: 245px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .library-book-card .library-cover { transition: none; }
 }
