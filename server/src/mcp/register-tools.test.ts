@@ -132,7 +132,17 @@ describe("tool descriptors", () => {
         contentHash: "a".repeat(64),
         segmentationVersion: 1,
         paragraphCount: 3,
-        cloudSync: { enabled: true, provider: "r2" }
+        cloudSync: { enabled: true, provider: "r2" },
+        readingState: {
+          schemaVersion: 1,
+          updatedAt: "2026-08-04T00:03:00.000Z",
+          annotations: [{
+            pageIndex: 1,
+            text: "第一页也留下了批注",
+            comment: "这条批注是云端阅读档案中的",
+            createdAt: "2026-08-04T00:03:00.000Z"
+          }]
+        }
       },
       createdAt: "2026-08-04T00:00:00.000Z",
       updatedAt: "2026-08-04T00:00:00.000Z",
@@ -186,6 +196,23 @@ describe("tool descriptors", () => {
         style: "natural-conversation"
       }
     });
+    expect(result.structuredContent.sharedPage.contextPages).toEqual([
+      { pageIndex: 1, text: "第一页正文" }
+    ]);
+    expect(result.structuredContent.sharedPage.recentBookNotes).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          pageIndex: 1,
+          quote: "第一页也留下了批注",
+          thought: "这条批注是云端阅读档案中的"
+        }),
+        expect.objectContaining({
+          pageIndex: 2,
+          quote: "第二页划线",
+          thought: "这是我的想法"
+        })
+      ])
+    );
     expect(result.content[0].text).toContain("不要复述正文");
     expect(TOOL_CONFIGS.read_shared_page_context).not.toHaveProperty("_meta.ui.resourceUri");
   });
