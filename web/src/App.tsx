@@ -354,7 +354,9 @@ export function App() {
 
   useEffect(() => {
     if (screen !== "novel") return;
-    if (hostLayout.displayMode === "fullscreen") setReaderImmersive(true);
+    // Reconcile state on remount. In-widget fallback remains active as long
+    // as the host does not publish a new display mode.
+    setReaderImmersive(hostLayout.displayMode === "fullscreen");
   }, [hostLayout.displayMode, screen]);
 
   useEffect(() => {
