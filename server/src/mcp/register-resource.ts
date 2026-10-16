@@ -9,7 +9,7 @@ import {
 } from "./register-tools.js";
 
 const READING_NEST_DESCRIPTION =
-  "一个温暖的移动端共读小窝，用于阅读用户自己粘贴或导入的小说文本。";
+  "一个温暖的移动端庄园阅览室，用于阅读用户自己粘贴或导入的小说文本。";
 
 type ReadingResourceBootstrap = Record<string, unknown>;
 type ReadingResourceBootstrapLoader = () => Promise<ReadingResourceBootstrap>;
@@ -78,10 +78,10 @@ export function registerReadingResource(
   for (const uri of [READING_NEST_URI, ...READING_NEST_LEGACY_URIS]) {
     registerAppResource(
       server,
-      "鼠鼠与纪清和的书屋",
+      "优雅与艺术 · 鼠鼠与纪清和",
       uri,
       {
-        description: "移动端优先的小说共读小窝",
+        description: "移动端优先的小说庄园阅览室",
         _meta: resourceMeta
       },
       async () => {
@@ -119,7 +119,7 @@ export function registerReadingCompatibilityProbeResource(server: McpServer, wor
     widgetDomain,
     resourceCsp,
     openaiWidgetCsp,
-    "一个最小的 ChatGPT App 组件，用于确认原生客户端能否渲染 鼠鼠与纪清和的书屋 小窝。"
+    "一个最小的 ChatGPT App 组件，用于确认原生客户端能否渲染 优雅与艺术 · 鼠鼠与纪清和 小窝。"
   );
 
   for (const uri of [
@@ -128,10 +128,10 @@ export function registerReadingCompatibilityProbeResource(server: McpServer, wor
   ]) {
     registerAppResource(
       server,
-      "鼠鼠与纪清和的书屋 App 兼容性检查",
+      "优雅与艺术 · 鼠鼠与纪清和 App 兼容性检查",
       uri,
       {
-        description: "一个最小的 ChatGPT App 组件，用于确认原生客户端能否渲染 鼠鼠与纪清和的书屋 小窝。",
+        description: "一个最小的 ChatGPT App 组件，用于确认原生客户端能否渲染 优雅与艺术 · 鼠鼠与纪清和 小窝。",
         _meta: resourceMeta
       },
       async () => ({

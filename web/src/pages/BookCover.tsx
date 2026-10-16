@@ -107,7 +107,7 @@ export function BookCover(props: {
         <button type="button" className="cover-back" onClick={props.onBack} aria-label="返回书架">
           <ArrowLeft className="cover-toolbar-icon" aria-hidden="true" strokeWidth={1.8} />
         </button>
-        <span>鼠鼠与纪清和的书屋</span>
+        <span>优雅与艺术 · 庄园阅览室</span>
         {availableKinds.length > 0 ? (
           <button
             type="button"
@@ -135,7 +135,8 @@ export function BookCover(props: {
             }
           >
             <span className="cover-book-edge" aria-hidden="true" />
-            <span className="cover-book-kicker">MOUSE × QINGHE<br/>鼠鼠与纪清和的书屋</span>
+            <span className="cover-estate-seal" aria-hidden="true">E <small>&amp;</small> A</span>
+            <span className="cover-book-kicker">ELEGANCE &amp; THE ARTS<br/>PRIVATE LIBRARY</span>
             <strong title={fullTitle}>{displayTitle}</strong>
             <span className="cover-book-rule" aria-hidden="true" />
             <small>{props.item.session.status === "completed" ? "阅毕" : "正在共读"}</small>
@@ -144,7 +145,7 @@ export function BookCover(props: {
         </div>
 
         <div className="cover-details">
-          <span className="cover-details-kicker">OUR READING NOTES · 书中有你我</span>
+          <span className="cover-details-kicker">THE ESTATE COLLECTION · 藏书档案</span>
           <h1 title={fullTitle}>{fullTitle}</h1>
           <p className="cover-progress">
             读到 {props.item.session.userCurrentPosition.label}

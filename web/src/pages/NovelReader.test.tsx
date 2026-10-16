@@ -54,6 +54,23 @@ function selectText(text: string, anchorNode: Node) {
 }
 
 describe("NovelReader", () => {
+  it("switches the estate tea companion between everyday and Lady Qinghe modes", () => {
+    const onToggleCompanionVoice = vi.fn();
+    const props = { ...makeProps(), onToggleCompanionVoice };
+    const { rerender, container } = render(<NovelReader {...props} companionVoice="regular" />);
+
+    expect(screen.getByText("纪清和 · 陪你读这一页")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "请夫人入座" }));
+    expect(onToggleCompanionVoice).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole("button", { name: "和纪清和共读" })).toBeInTheDocument();
+
+    rerender(<NovelReader {...props} companionVoice="british_lady" />);
+    expect(screen.getByText("夫人已入座，茶已备好")).toBeInTheDocument();
+    expect(container.querySelector(".reader-companion-bar.is-lady")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "夫人暂退" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "请夫人点评" })).toBeInTheDocument();
+  });
+
   it("keeps the page number in the bottom action bar without a more-actions entry", () => {
     render(<NovelReader {...makeProps()} />);
 

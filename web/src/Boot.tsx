@@ -108,7 +108,7 @@ class BootErrorBoundary extends Component<BoundaryProps, BoundaryState> {
   }
 
   componentDidCatch(error: unknown, _info: ErrorInfo) {
-    console.error("鼠鼠与纪清和的书屋 reading nest boot failed", sanitizeErrorMessage(error));
+    console.error("优雅与艺术 reading nest boot failed", sanitizeErrorMessage(error));
   }
 
   render() {

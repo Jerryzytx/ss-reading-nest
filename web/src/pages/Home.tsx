@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import {
   BookOpen,
+  Coffee,
+  Crown,
   Eye,
   Ellipsis,
   History,
@@ -13,6 +15,7 @@ import {
   Sparkles,
   type LucideIcon
 } from "lucide-react";
+import { EstateIllustration } from "../components/EstateIllustration.js";
 import type {
   ReadingRecord as StoredReadingRecord,
   SessionBundle,
@@ -130,7 +133,9 @@ export function Home(props: {
   return (
     <main className="library-app-shell">
       <aside className="library-rail" aria-label="书屋导航">
-        <strong className="rail-brand">鼠鼠与纪清和的书屋<small>OURS, PAGE BY PAGE.</small></strong>
+        <span className="estate-rail-monogram" aria-hidden="true">E<span>&amp;</span>A</span>
+        <strong className="rail-brand">优雅与艺术<small>ELEGANCE &amp; THE ARTS</small></strong>
+        <span className="estate-rail-owner">鼠鼠 · 纪清和</span>
         <nav>
           {LIBRARY_NAV.map((item) => {
             const Icon = item.icon;
@@ -151,37 +156,52 @@ export function Home(props: {
       </aside>
 
       <section className="home-shell">
-        <header className="library-header">
-          <div>
-            <span className="visually-hidden">鼠鼠与纪清和的书屋</span>
-            <div className="library-brandline">
-              <span className="library-brand-icon" aria-hidden="true"><BookOpen strokeWidth={1.6} /></span>
-              <span className="library-kicker">鼠鼠与纪清和的书屋<small>READING TOGETHER, SLOWLY.</small></span>
+        <header className="library-header estate-library-header">
+          <span className="visually-hidden">鼠鼠与纪清和的书屋</span>
+          <section className="estate-hero" aria-label="优雅与艺术 · 私人庄园阅览室">
+            <EstateIllustration />
+            <div className="estate-hero-content">
+              <div className="estate-hero-eyebrow"><span>THE PRIVATE READING SOCIETY</span><span>EST. MMXXVI</span></div>
+              <span className="estate-hero-crest" aria-hidden="true"><Crown strokeWidth={1.25} /></span>
+              <h1>优雅与艺术</h1>
+              <p className="estate-hero-english">ELEGANCE &amp; THE ARTS</p>
+              <span className="estate-hero-ornament" aria-hidden="true">✦</span>
+              <p className="estate-hero-motto">在这里，阅读是正事。刻薄只是副产品。</p>
+              <small className="estate-hero-signature">MOUSE &amp; LADY QINGHE · THE ESTATE LIBRARY</small>
             </div>
-            <h1>{headerCopy.title}</h1>
-            <p>{headerCopy.subtitle}</p>
-            <div className="library-promise" aria-label="我们的共读约定"><Sparkles aria-hidden="true" strokeWidth={1.7}/><span>鼠鼠负责翻书，纪清和负责陪你胡思乱想。</span></div>
-          </div>
-          {view === "library" ? (
-            <div className="library-header-actions">
-              {props.onExpand ? (
-                <button type="button" className="library-quiet-action" onClick={props.onExpand}>
-                  <Maximize2 className="library-action-icon" aria-hidden="true" strokeWidth={1.8} />
-                  <span>展开书房</span>
+          </section>
+          <div className="estate-room-row">
+            <div className="estate-room-heading">
+              <span className="estate-room-kicker">THE LIBRARY · VOL. I</span>
+              <h2>{headerCopy.title}</h2>
+              <p>{headerCopy.subtitle}</p>
+            </div>
+            {view === "library" ? (
+              <div className="library-header-actions">
+                {props.onExpand ? (
+                  <button type="button" className="library-quiet-action" onClick={props.onExpand}>
+                    <Maximize2 className="library-action-icon" aria-hidden="true" strokeWidth={1.8} />
+                    <span>展开书房</span>
+                  </button>
+                ) : null}
+                <button
+                  type="button"
+                  className="library-add"
+                  aria-label="小说共读：导入小说"
+                  onClick={props.onNew}
+                >
+                  <Plus className="library-action-icon" aria-hidden="true" strokeWidth={1.9} />
+                  <span>添置藏书</span>
                 </button>
-              ) : null}
-              <button
-                type="button"
-                className="library-add"
-                aria-label="小说共读：导入小说"
-                onClick={props.onNew}
-              >
-                <Plus className="library-action-icon" aria-hidden="true" strokeWidth={1.9} />
-                <span>导入小说</span>
-              </button>
-            </div>
-          ) : null}
+              </div>
+            ) : null}
+          </div>
         </header>
+
+        <div className="estate-etiquette" aria-label="庄园守则">
+          <Coffee aria-hidden="true" strokeWidth={1.6} />
+          <span><strong>庄园守则 · NO. 01</strong> 本庄园禁止恶意批评。所有恶意批评均须以艺术鉴赏的名义进行。</span>
+        </div>
 
         <div className="library-skin-switch" aria-label="界面皮肤">
           <span>换肤</span>
@@ -190,7 +210,7 @@ export function Home(props: {
             aria-pressed={props.skin === "blue"}
             onClick={() => props.onSkinChange("blue")}
           >
-            薄荷
+            庄园
           </button>
           <button
             type="button"
@@ -244,7 +264,7 @@ export function Home(props: {
 
             <section className="bookshelf-section" aria-label="小说书架">
               <div className="section-heading">
-                <h2>书架</h2>
+                <h2>庄园藏书</h2>
                 <span>{novels.length} 本小说</span>
               </div>
               <div className="bookshelf-filters" aria-label="书架筛选">
@@ -277,7 +297,7 @@ export function Home(props: {
                   ) : null}
                 </div>
               ) : novels.length === 0 ? (
-                <div className="empty-nest">书架里暂时没有小说。导入一本，我们就从第一页开始。</div>
+                <div className="empty-nest">藏书室尚且空荡。夫人已备好红茶，只缺一本值得评论的书。</div>
               ) : visible.length === 0 ? (
                 <div className="empty-nest">这个筛选下还没有小说。</div>
               ) : (
@@ -453,7 +473,7 @@ function ContinueReadingCard(props: {
     <section className="continue-card" aria-label="继续阅读">
       <DefaultCover item={props.item} palette={0} compact />
       <div className="continue-card-body">
-        <span className="continue-status">{missing ? "正文需要补回" : "继续阅读"}</span>
+        <span className="continue-status">{missing ? "正文需要补回" : "上次读到这里"}</span>
         <h2
           className="continue-card-title"
           aria-label={props.item.session.title}
@@ -523,7 +543,7 @@ function DefaultCover(props: { item: BookshelfItem; palette: number; compact?: b
       <span className={`library-cover library-cover-${props.palette} ${props.compact ? "compact" : ""}`} aria-hidden="true">
         <span className="library-cover-shine" />
       <span className="library-cover-title" data-title={coverTitle(props.item.session.title)} />
-      <span className="library-cover-mark">书屋</span>
+      <span className="library-cover-mark">E &amp; A · PRIVATE COLLECTION</span>
     </span>
   );
 }
