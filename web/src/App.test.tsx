@@ -919,7 +919,7 @@ describe("App", () => {
       );
       expect(sendFollowUpMessage).toHaveBeenCalledWith({
         prompt: expect.stringContaining("想和你一起聊聊"),
-        scrollToBottom: true
+        scrollToBottom: false
       });
       const prompt = String(sendFollowUpMessage.mock.calls.at(-1)?.[0]?.prompt ?? "");
       expect(prompt).toContain("这是 GPT 必须看到的当前段落。");
