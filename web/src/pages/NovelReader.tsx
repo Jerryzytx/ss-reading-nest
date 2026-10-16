@@ -7,6 +7,7 @@ import {
   Coffee,
   MessageCircleQuestion,
   PencilLine,
+  Settings2,
   Save,
   Send,
   Sparkles,
@@ -75,6 +76,9 @@ export function NovelReader(props: {
     [currentThoughts]
   );
   const [selected, setSelected] = useState("");
+  const [tapToQuote, setTapToQuote] = useState(false);
+  const [typographyOpen, setTypographyOpen] = useState(false);
+  const [fontSize, setFontSize] = useState(readReaderFontSize);
   const [selectionMode, setSelectionMode] = useState<SelectionMode>(null);
   const [draft, setDraft] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -92,6 +96,10 @@ export function NovelReader(props: {
   const swipe = useHorizontalPaging(previous, next);
   const scrollRef = useRef<HTMLElement>(null);
   const articleRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    try { window.localStorage.setItem("estate-reader-font-size", String(fontSize)); } catch { /* Private host storage is optional. */ }
+  }, [fontSize]);
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = props.initialScrollTop;
@@ -142,6 +150,15 @@ export function NovelReader(props: {
     setSelected(text);
     setSelectionMode(null);
     setDraft(existing?.note ?? "");
+  }
+
+  function selectParagraph(text: string) {
+    const clean = text.replace(/\\s+/g, " ").trim().slice(0, 10_000);
+    if (!clean) return;
+    const existing = currentQuotes.find((quote) => normalizeQuote(quote.content) === clean);
+    setSelected(clean);
+    setDraft(existing?.note ?? "");
+    setSelectionMode("thought");
   }
 
   function openComposer(mode: Exclude<SelectionMode, null>, quote?: Quote) {
@@ -328,14 +345,44 @@ export function NovelReader(props: {
             {...swipe}
             onScroll={(event) => props.onScrollPosition(event.currentTarget.scrollTop)}
             onMouseUp={captureSelection}
+            onContextMenu={captureSelection}
             onTouchEnd={(event) => {
-              swipe.onTouchEnd(event);
-              window.setTimeout(captureSelection, 0);
+              if (!tapToQuote) swipe.onTouchEnd(event);
+              window.setTimeout(captureSelection, 100);
             }}
           >
-          <article ref={articleRef} className="novel-paper">
+          <div className="reader-reading-tools" aria-label="阅读工具">
+            <button type="button" aria-pressed={tapToQuote} onClick={() => { setTapToQuote((v) => !v); clearSelection(); }}>
+              <PencilLine aria-hidden="true" strokeWidth={1.8} />
+              {tapToQuote ? "退出段落选择" : "点选段落批注"}
+            </button>
+            <button type="button" aria-expanded={typographyOpen} onClick={() => setTypographyOpen((v) => !v)}>
+              <Settings2 aria-hidden="true" strokeWidth={1.8} />
+              字号 {fontSize}
+            </button>
+          </div>
+          {typographyOpen ? (
+            <div className="reader-typography-controls" aria-label="阅读字号设置">
+              <span>文字大小</span>
+              <button type="button" aria-label="缩小字号" disabled={fontSize <= 14} onClick={() => setFontSize((n) => Math.max(14, n - 2))}>A−</button>
+              <output aria-label="当前字号">{fontSize}px</output>
+              <button type="button" aria-label="放大字号" disabled={fontSize >= 28} onClick={() => setFontSize((n) => Math.min(28, n + 2))}>A＋</button>
+              <button type="button" onClick={() => setFontSize(18)}>默认</button>
+            </div>
+          ) : null}
+          {tapToQuote ? <p className="reader-tap-hint">轻点想收藏的段落，就能直接写批注；长按拖动仍可精确划选文字。</p> : null}
+          <article ref={articleRef} className="novel-paper" style={{ fontSize: `${fontSize}px` }}>
             {current.split("\n").map((line, lineIndex) => (
-              <p key={lineIndex}>{highlightLine(line, currentQuotes, openQuoteDetail)}</p>
+              <p
+                key={lineIndex}
+                className={tapToQuote && line.trim() ? "reader-annotatable-paragraph" : undefined}
+                role={tapToQuote && line.trim() ? "button" : undefined}
+                tabIndex={tapToQuote && line.trim() ? 0 : undefined}
+                onClick={tapToQuote ? () => selectParagraph(line) : undefined}
+                onKeyDown={tapToQuote ? (event) => {
+                  if (event.key === "Enter" || event.key === " ") { event.preventDefault(); selectParagraph(line); }
+                } : undefined}
+              >{highlightLine(line, currentQuotes, openQuoteDetail)}</p>
             ))}
           </article>
 
@@ -710,6 +757,15 @@ function isReadableSectionHeading(line: string) {
     /^第\s*[0-9０-９一二两三四五六七八九十百千万〇零]+\s*[章节卷回部篇集](?!.*[。！？!?]$).{0,50}$/.test(line) ||
     /^(序章|序言|前言|引子|楔子|尾声|后记)$/.test(line)
   );
+}
+
+function readReaderFontSize() {
+  try {
+    const raw = Number(window.localStorage.getItem("estate-reader-font-size"));
+    return Number.isFinite(raw) && raw >= 14 && raw <= 28 ? raw : 18;
+  } catch {
+    return 18;
+  }
 }
 
 function normalizePageNumber(value: string) {
