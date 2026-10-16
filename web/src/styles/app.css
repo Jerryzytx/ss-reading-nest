@@ -2450,8 +2450,10 @@ html[data-display-mode="fullscreen"] .app {
 .cover-estate-seal {
   position: relative;
   z-index: 1;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
   width: 61px;
   height: 61px;
   margin-bottom: -6px;

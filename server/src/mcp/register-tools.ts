@@ -39,6 +39,7 @@ import { toolResult } from "./tool-result.js";
 // previous connection can still fetch its template after a later app release.
 export const READING_NEST_URI = READING_NEST_RESOURCE_URI;
 export const READING_NEST_LEGACY_URIS = [
+  "ui://ss-reading-nest/app-v85-mouse-qinghe-reading-room.html",
   "ui://ss-reading-nest/app-v84-pinned-reader-companion.html",
   "ui://ss-reading-nest/app-v83-native-inline.html",
   "ui://ss-reading-nest/app-v78-context-fallback-remount.html",
@@ -119,7 +120,7 @@ const readSharedPageContextInputSchema = z
 
 export const TOOL_CONFIGS = {
   open_reading_nest: {
-    title: "打开 鼠鼠与纪清和的书屋",
+    title: "打开《优雅与艺术》庄园书屋",
     description: "Use this when the user wants to open the reading nest or continue recent reading.",
     inputSchema: openReadingNestInputSchema,
     annotations: readOnly,
@@ -146,7 +147,7 @@ export const TOOL_CONFIGS = {
     _meta: appOnlyToolMeta
   },
   check_reading_nest_app_compatibility: {
-    title: "检查 鼠鼠与纪清和的书屋 App 兼容性",
+    title: "检查《优雅与艺术》书屋 App 兼容性",
     description:
       "Use this only to verify whether the current ChatGPT client can render a minimal 鼠鼠与纪清和的书屋 App component. It does not read or modify any book data.",
     inputSchema: z.object({}),
@@ -387,7 +388,7 @@ export function registerReadingTools(
     return {
       ...toolResult(
         summarizeNovelBookshelfForModel(bookshelf.bookshelfSessions),
-        "已打开 鼠鼠与纪清和的书屋。完整书架只显示在阅读组件内。后续如果鼠鼠要求共读、讨论当前页或读取已保存的想法，必须立即调用 read_shared_page_context；不要等待阅读组件再次推送内容。"
+        "已打开《优雅与艺术》庄园书屋。完整书架只显示在阅读组件内。后续如果鼠鼠要求共读、讨论当前页或读取已保存的想法，必须立即调用 read_shared_page_context；不要等待阅读组件再次推送内容。"
       ),
       _meta: { privateBookshelf: bookshelf }
     };

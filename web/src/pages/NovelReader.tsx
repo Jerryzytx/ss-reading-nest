@@ -420,7 +420,7 @@ export function NovelReader(props: {
                     onClick={() => void submitQuestion()}
                   >
                     <Send aria-hidden="true" strokeWidth={1.8} />
-                    {submitting ? "正在处理…" : "立即问纪清和"}
+                    {submitting ? "正在处理…" : props.companionVoice === "british_lady" ? "请夫人点评" : "立即问纪清和"}
                   </button>
                 </div>
               </div>
@@ -666,7 +666,7 @@ export function NovelReader(props: {
         </div>
       </div>
       <ReaderActions
-        primaryLabel="与夫人共读"
+        primaryLabel={props.companionVoice === "british_lady" ? "请夫人点评" : "和纪清和共读"}
         pageLabel={`${index + 1} / ${props.chunks.length}`}
         onPrimary={() => props.onSharePage(current)}
         primaryDisabled={props.actionInFlight}
