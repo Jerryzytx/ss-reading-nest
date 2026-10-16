@@ -184,10 +184,23 @@ export async function callTool(
   return { unavailable: true, reason: env };
 }
 
+/** Prefer the native ChatGPT message API because it supports keeping the reader in view. */
 export async function askChatGpt(
   prompt: string,
   options: { scrollToBottom?: boolean } = {}
 ) {
+  let nativeError: unknown;
+  if (window.openai?.sendFollowUpMessage) {
+    try {
+      await window.openai.sendFollowUpMessage({
+        prompt,
+        scrollToBottom: options.scrollToBottom ?? false
+      });
+      return;
+    } catch (error) {
+      nativeError = error;
+    }
+  }
   const env = detectHostEnvironment();
   let bridgeError: unknown;
   if (env === "chatgpt-app-bridge") {
@@ -201,14 +214,8 @@ export async function askChatGpt(
       }
     }
   }
-  if (window.openai?.sendFollowUpMessage) {
-    await window.openai.sendFollowUpMessage({
-      prompt,
-      scrollToBottom: options.scrollToBottom ?? false
-    });
-    return;
-  }
   if (bridgeError) throw bridgeError;
+  if (nativeError) throw nativeError;
 }
 
 export async function requestReaderPip(): Promise<boolean> {
