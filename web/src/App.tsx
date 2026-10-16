@@ -1334,6 +1334,7 @@ export function App() {
         fallbackMessagePrompt: buildShareFallbackPrompt({
           prompt,
           currentText,
+          includedText,
           savedThoughts
         }),
         updateModelContext,
@@ -2473,19 +2474,18 @@ function buildCurrentPageRequest(input: {
 function buildShareFallbackPrompt(input: {
   prompt: string;
   currentText: string;
+  includedText?: string;
   savedThoughts: string;
 }) {
-  if (input.savedThoughts) {
-    return [
-      input.prompt,
-      "【兼容模式共读资料：只用于理解，请不要复述】",
-      input.savedThoughts.slice(0, 4_000)
-    ].join("\n\n");
-  }
+  // ChatGPT mobile may reject updateModelContext. The fallback must preserve
+  // the same multi-page continuity even without the host's context channel.
   return [
     input.prompt,
-    "【兼容模式本页节选：只用于理解，请不要复述】",
-    compactReadingExcerpt(input.currentText)
+    "【兼容模式连续阅读节选：只用于理解，请不要复述】",
+    compactReadingExcerpt(input.includedText || input.currentText, 6_000),
+    ...(input.savedThoughts
+      ? ["【鼠鼠保存的页边想法】", input.savedThoughts.slice(0, 4_000)]
+      : [])
   ].join("\n\n");
 }
 
