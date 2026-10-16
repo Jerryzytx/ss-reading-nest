@@ -1286,8 +1286,8 @@ export function App() {
     const rangeStart = Math.max(1, currentPosition.index - 3);
     const recentPages = chunks.slice(rangeStart - 1, currentPosition.index);
     const includedText = recentPages
-      .map((page, offset) => `【第 ${rangeStart + offset} 页】\\n${page}`)
-      .join("\\n\\n").slice(-19_500);
+      .map((page, offset) => `【第 ${rangeStart + offset} 页】\n${page}`)
+      .join("\n\n").slice(-19_500);
     const savedThoughts = formatPageThoughts(
       sessionBundle.quotes.filter(
         (quote) =>
