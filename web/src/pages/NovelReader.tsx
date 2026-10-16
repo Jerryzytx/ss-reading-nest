@@ -23,6 +23,8 @@ export function NovelReader(props: {
   session: ReadingSession;
   chunks: string[];
   savedQuotes: Quote[];
+  companionVoice?: "regular" | "british_lady";
+  onToggleCompanionVoice?: () => void;
   onPosition: (index: number) => void;
   onSharePage: (currentText: string) => Promise<void> | void;
   onAskSelection: (selectedText: string, question: string) => Promise<void> | void;
@@ -301,6 +303,22 @@ export function NovelReader(props: {
         onOpenNavigation={openNavigation}
       />
       <ReadingSyncStatus session={props.session} />
+      {props.onToggleCompanionVoice ? (
+      <div className="reader-companion-bar" aria-label="陪读模式">
+        <span>
+          {props.companionVoice === "british_lady"
+            ? "☕ 英国夫人正在陪你读书"
+            : "小纪正在陪你读书"}
+        </span>
+        <button
+          type="button"
+          aria-pressed={props.companionVoice === "british_lady"}
+          onClick={props.onToggleCompanionVoice}
+        >
+          {props.companionVoice === "british_lady" ? "切回小纪" : "请英国夫人"}
+        </button>
+      </div>
+      ) : null}
       <div className="reader-workspace novel-workspace">
         <div className="novel-reading-column">
           <section

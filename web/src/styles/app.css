@@ -1157,6 +1157,31 @@ html[data-display-mode="fullscreen"] .app {
   font-size: 12px;
   font-weight: 760;
 }
+
+.reader-companion-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 16px;
+  color: var(--muted);
+  font-size: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.reader-companion-bar button {
+  flex: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 12px;
+  color: var(--ink);
+  background: var(--surface);
+  font-size: 12px;
+}
+.reader-companion-bar button[aria-pressed="true"] {
+  color: var(--blue-strong);
+  border-color: var(--blue-strong);
+}
+
 .reader-actions {
   z-index: 4;
   display: grid;
