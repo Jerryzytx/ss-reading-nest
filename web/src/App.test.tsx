@@ -1919,9 +1919,11 @@ describe("App", () => {
     requestDisplayMode.mockRejectedValueOnce(new Error("host rejected fullscreen"));
     fireEvent.click(screen.getByRole("button", { name: "沉浸阅读" }));
     await waitFor(() => {
-      expect(screen.getByRole("button", { name: "沉浸阅读" })).toBeInTheDocument();
+      // Even if ChatGPT denies native full-screen, the local immersive layout works.
+      expect(screen.getByRole("button", { name: "退出沉浸" })).toBeInTheDocument();
+      expect(screen.getByText(/暂不支持系统全屏/)).toBeInTheDocument();
       expect(setWidgetState).toHaveBeenLastCalledWith(
-        expect.objectContaining({ screen: "novel", sessionId, immersive: false })
+        expect.objectContaining({ screen: "novel", sessionId, immersive: true })
       );
     });
 
