@@ -140,7 +140,7 @@ describe("Home novel bookshelf", () => {
 
     fireEvent.click(screen.getAllByRole("button", { name: "阅读记录" })[0]!);
 
-    expect(screen.getByRole("heading", { name: "阅读记录", level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "阅读记录", level: 2 })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "还没有阅读记录" })).toBeInTheDocument();
     expect(screen.queryByText(/演示数据/)).not.toBeInTheDocument();
   });
