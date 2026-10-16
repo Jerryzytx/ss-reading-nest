@@ -114,7 +114,8 @@ const readSharedPageContextInputSchema = z
   .object({
     sessionId: z.string().min(1).optional(),
     title: z.string().trim().min(1).max(200).optional(),
-    positionIndex: z.number().int().min(1).optional()
+    positionIndex: z.number().int().min(1).optional(),
+    startIndex: z.number().int().min(1).optional()
   })
   .strict();
 
@@ -135,7 +136,7 @@ export const TOOL_CONFIGS = {
   read_shared_page_context: {
     title: "共读当前书页与鼠鼠的想法",
     description:
-      "必须在鼠鼠要求共读当前页时调用。触发语包括：和纪清和共读、和家机共读（旧称）、读这一页、刚读完第几页、看看这一页、读取我保存的想法、聊聊当前内容。即使阅读组件已经打开，也要立即调用本工具读取当前页正文和鼠鼠保存的想法；不要等待组件再次推送，不要声称拿不到内容。读取后直接回应鼠鼠的想法，不要复述或概括整页，也不要逐条转抄想法。",
+      "必须在鼠鼠要求共读时调用。触发语包括：和纪清和共读、和家机共读（旧称）、读这一页、刚读完第几页、看看这一页、读取我保存的想法、聊聊当前内容。即使阅读组件已经打开，也要立即调用；不要等待组件再次推送。默认提供当前页、前几页连贯上下文和整本书最近的批注；用户要求补读一段时，用 startIndex（起始页）和 positionIndex（末页），每次最多读取连续10页。不要声称看不到保存的批注；阅读后自然讨论，不复述整页。",
     inputSchema: readSharedPageContextInputSchema,
     annotations: readOnly
   },
@@ -397,7 +398,7 @@ export function registerReadingTools(
   server.registerTool(
     "read_shared_page_context",
     toolConfigs.read_shared_page_context,
-    async ({ sessionId, title, positionIndex }) => {
+    async ({ sessionId, title, positionIndex, startIndex }) => {
       const snapshot = await service.getBookshelfSnapshot(false);
       const novelBundles = snapshot.sessionBundles.filter(
         ({ session }) => session.type === "novel"
@@ -418,32 +419,72 @@ export function registerReadingTools(
         );
       }
 
-      const index = positionIndex ?? bundle.session.userCurrentPosition.index;
+      const index = Math.max(1, Math.min(
+        positionIndex ?? bundle.session.userCurrentPosition.index,
+        bundle.session.sourceManifest?.paragraphCount ?? Number.MAX_SAFE_INTEGER
+      ));
+      // A bounded page range keeps narrative continuity without loading the whole book.
+      const rangeStart = Math.max(1, Math.min(startIndex ?? index - 3, index), index - 9);
       const savedThoughts = bundle.quotes
-        .filter(
-          (quote) =>
-            quote.position.kind === bundle.session.userCurrentPosition.kind &&
-            quote.position.index === index &&
-            Boolean(quote.note?.trim() || quote.clearThought?.trim())
+        .filter((quote) =>
+          quote.position.kind === bundle.session.userCurrentPosition.kind &&
+          quote.position.index === index &&
+          Boolean(quote.note?.trim() || quote.clearThought?.trim())
         )
         .map((quote) => ({
           quote: quote.content,
           ...(quote.note?.trim() ? { thought: quote.note.trim() } : {}),
-          ...(quote.clearThought?.trim()
-            ? { clearThought: quote.clearThought.trim() }
-            : {})
+          ...(quote.clearThought?.trim() ? { clearThought: quote.clearThought.trim() } : {})
         }));
 
+      // Previous versions hid annotations outside the current page and
+      // archive notes that were written into sourceManifest.readingState.
+      const quoteNotes = bundle.quotes
+        .filter((quote) => Boolean(quote.note?.trim() || quote.clearThought?.trim()))
+        .map((quote) => ({
+          pageIndex: quote.position.index,
+          quote: quote.content,
+          ...(quote.note?.trim() ? { thought: quote.note.trim() } : {}),
+          ...(quote.clearThought?.trim() ? { clearThought: quote.clearThought.trim() } : {}),
+          savedAt: quote.createdAt
+        }));
+      const archiveNotes = (bundle.session.sourceManifest?.readingState?.annotations ?? [])
+        .filter((item) => Boolean(item.comment?.trim() || item.assistantSummary?.trim()))
+        .map((item) => ({
+          pageIndex: item.pageIndex,
+          quote: item.text,
+          ...(item.comment?.trim() ? { thought: item.comment.trim() } : {}),
+          ...(item.assistantSummary?.trim() ? { clearThought: item.assistantSummary.trim() } : {}),
+          savedAt: item.updatedAt ?? item.createdAt
+        }));
+      const reactionNotes = bundle.reactions.map((item) => ({
+        pageIndex: item.position.index,
+        quote: "",
+        thought: item.content,
+        savedAt: item.createdAt
+      }));
+      const recentBookNotes = [...quoteNotes, ...archiveNotes, ...reactionNotes]
+        .sort((a, b) => b.savedAt.localeCompare(a.savedAt))
+        .slice(0, 40)
+        .map(({ savedAt: _savedAt, ...item }) => item);
+      const checkpoint = bundle.session.sourceManifest?.readingState?.checkpoint;
+
       let currentText: string | undefined;
+      let contextPages: Array<{ pageIndex: number; text: string }> = [];
       if (cloudSourceService && bundle.session.sourceManifest?.cloudSync.enabled) {
         try {
           const { sourceText, sourceManifest } = await cloudSourceService.restoreNovelSource(
             bundle.session.id
           );
-          currentText = splitNovelTextForVersion(
-            sourceText,
-            sourceManifest.segmentationVersion
-          )[index - 1];
+          const pages = splitNovelTextForVersion(sourceText, sourceManifest.segmentationVersion);
+          currentText = pages[index - 1];
+          const previous = pages.slice(rangeStart - 1, index - 1);
+          let remainingChars = 18_000;
+          contextPages = previous.map((page, offset) => {
+            const text = page.slice(0, Math.min(6_000, remainingChars));
+            remainingChars -= text.length;
+            return { pageIndex: rangeStart + offset, text };
+          }).filter((entry) => entry.text.length > 0);
         } catch {
           currentText = undefined;
         }
@@ -451,7 +492,7 @@ export function registerReadingTools(
 
       return toolResult(
         {
-          available: Boolean(currentText || savedThoughts.length),
+          available: Boolean(currentText || savedThoughts.length || recentBookNotes.length),
           sharedPage: {
             sessionId: bundle.session.id,
             title: bundle.session.title,
@@ -460,6 +501,10 @@ export function registerReadingTools(
               index
             },
             ...(currentText ? { currentText } : {}),
+            contextPages,
+            contextRange: { start: rangeStart, end: index },
+            recentBookNotes,
+            ...(checkpoint ? { checkpoint } : {}),
             savedThoughts
           },
           responsePolicy: {
