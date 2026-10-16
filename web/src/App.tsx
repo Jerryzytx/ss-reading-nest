@@ -607,11 +607,11 @@ export function App() {
     }
     saveFullscreenIntent(true);
     setReaderCollapsed(false);
-    setReaderImmersive(true);
+    // Wait for host confirmation; a successful request is not proof that the
+    // iframe's display mode actually changed.
     const supported = await requestReaderFullscreen();
     if (!supported) {
-      // The host controls its actual iframe/fullscreen capabilities.
-      // Keep a usable in-widget immersive layout rather than failing the action.
+      setReaderImmersive(true);
       setToast("此客户端暂不支持系统全屏，已展开插件内沉浸阅读。");
     }
   }
@@ -2479,15 +2479,20 @@ function buildShareFallbackPrompt(input: {
   includedText?: string;
   savedThoughts: string;
 }) {
-  // ChatGPT mobile may reject updateModelContext. The fallback must preserve
-  // the same multi-page continuity even without the host's context channel.
+  // On devices without a model-context bridge, notes stay concise and the
+  // assistant can fetch the bounded previous pages using the co-read tool.
+  if (input.savedThoughts) {
+    return [
+      input.prompt,
+      "【兼容模式共读资料：只用于理解，请不要复述】",
+      input.savedThoughts.slice(0, 4_000),
+      "需要前后几页正文时，请调用 read_shared_page_context 继续共读。"
+    ].join("\n\n");
+  }
   return [
     input.prompt,
-    "【兼容模式连续阅读节选：只用于理解，请不要复述】",
-    compactReadingExcerpt(input.includedText || input.currentText, 6_000),
-    ...(input.savedThoughts
-      ? ["【鼠鼠保存的页边想法】", input.savedThoughts.slice(0, 4_000)]
-      : [])
+    "【兼容模式本页节选与上下文：只用于理解，请不要复述】",
+    compactReadingExcerpt(input.includedText || input.currentText, 6_000)
   ].join("\n\n");
 }
 
