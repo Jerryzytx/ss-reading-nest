@@ -73,23 +73,23 @@ html[data-display-mode="fullscreen"] .app {
   min-height: 100dvh;
 }
 .library-theme-blue {
-  --cream: #f3f7f7;
-  --paper: #fffdfa;
-  --surface: #fffefb;
-  --sage: #e8f0ec;
-  --sage-strong: #58786d;
-  --wood: #5d859d;
-  --blue: #a7c8d6;
-  --blue-strong: #4d7891;
-  --blue-soft: #e9f4f7;
-  --blush: #f3e5e9;
-  --champagne: #c8ae7b;
-  --rose-shadow: #687f8b;
-  --ink: #273842;
-  --muted: #71828b;
-  --line: #d8e3e5;
+  --cream: #eff7f2;
+  --paper: #fffdf8;
+  --surface: #fffefa;
+  --sage: #dceee5;
+  --sage-strong: #477667;
+  --wood: #6c9c8c;
+  --blue: #a8d3c0;
+  --blue-strong: #376b5b;
+  --blue-soft: #e5f3ea;
+  --blush: #f8ece4;
+  --champagne: #d7b989;
+  --rose-shadow: #749988;
+  --ink: #2d453e;
+  --muted: #688077;
+  --line: #d9e7dd;
   --danger: #ad5b55;
-  --accent-gradient: linear-gradient(135deg, #577f98 0%, #7facc0 76%, #c8ae7b 150%);
+  --accent-gradient: linear-gradient(130deg, #376c5a 0%, #639d89 100%);
 }
 .library-theme-pink {
   --cream: #fff8f5;
@@ -353,7 +353,7 @@ html[data-display-mode="fullscreen"] .app {
   box-shadow: inset 0 0 0 2px color-mix(in srgb, #fff 70%, transparent);
 }
 .library-skin-switch button:nth-of-type(1)::before {
-  background: linear-gradient(135deg, #edf4f7, #9db8ca);
+  background: linear-gradient(135deg, #f5fcf6, #81bea7);
 }
 .library-skin-switch button:nth-of-type(2)::before {
   background: linear-gradient(135deg, #fff6f1, #e6b7b8);
@@ -1993,4 +1993,147 @@ html[data-display-mode="fullscreen"] .app {
     animation: none !important;
   }
   button:not(:disabled):active { transform: none; }
+}
+
+
+/* The reading room: a soft, personal two-reader identity. All four legacy
+   themes remain available, while the default becomes the mint-and-paper room. */
+.library-app-shell { gap: 32px; }
+.app {
+  background:
+    radial-gradient(ellipse 68% 34% at 94% 0%, color-mix(in srgb, var(--sage) 78%, transparent), transparent 87%),
+    radial-gradient(ellipse 62% 38% at 0% 70%, color-mix(in srgb, var(--blush) 45%, transparent), transparent 88%),
+    var(--cream);
+}
+.library-brandline { display: flex; align-items: center; gap: 13px; margin-bottom: 14px; }
+.library-brand-icon {
+  display: grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  border: 1px solid color-mix(in srgb, var(--blue-strong) 14%, var(--line));
+  border-radius: 15px;
+  background: linear-gradient(135deg, var(--surface), var(--blue-soft));
+  color: var(--blue-strong);
+  box-shadow: 0 9px 22px color-mix(in srgb, var(--rose-shadow) 12%, transparent);
+  transform: rotate(-5deg);
+}
+.library-brand-icon svg { width: 24px; height: 24px; }
+.library-brandline .library-kicker { margin: 0; font-size: 13px; line-height: 1.4; letter-spacing: .04em; }
+.library-kicker small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: .17em;
+}
+.library-header h1 { font-size: clamp(36px, 4.6vw, 54px); letter-spacing: .025em; }
+.library-promise {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+  margin-top: 18px;
+  padding: 8px 12px;
+  border: 1px solid color-mix(in srgb, var(--blue-strong) 13%, var(--line));
+  border-radius: 100px;
+  background: color-mix(in srgb, var(--surface) 70%, var(--blue-soft));
+  color: var(--blue-strong);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.library-promise svg { width: 15px; height: 15px; flex: none; }
+.library-rail { border-radius: 20px; padding: 17px 13px; }
+.library-rail .rail-brand { color: var(--ink); font-size: 13px; font-weight: 720; }
+.rail-brand small { display: block; margin-top: 6px; color: var(--muted); font-size: 9px; letter-spacing: .13em; }
+.library-rail-item { border-radius: 12px; }
+.library-add, .library-quiet-action, .book-action, .action-primary,
+.quiet-button, .sheet-action { border-radius: 13px; }
+.library-add, .action-primary {
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--blue-strong) 19%, transparent);
+}
+.library-skin-switch { margin-bottom: 24px; }
+.continue-card, .records-hero, .record-metric, .records-card, .record-entry {
+  border-radius: 20px;
+}
+.continue-card { border-color: color-mix(in srgb, var(--blue) 50%, var(--line)); }
+.continue-card::before { width: 4px; background: var(--blue-strong); }
+.empty-nest, .reading-records-empty { border-radius: 20px; }
+.cover-stage {
+  position: relative;
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 17% 26%, color-mix(in srgb, var(--sage) 72%, transparent), transparent 63%),
+    linear-gradient(140deg, var(--surface), color-mix(in srgb, var(--blue-soft) 42%, var(--paper)));
+}
+.cover-book {
+  border: 1px solid color-mix(in srgb, var(--blue-strong) 18%, transparent);
+  border-radius: 12px 20px 20px 12px;
+  background:
+    radial-gradient(ellipse at 85% 13%, color-mix(in srgb, var(--surface) 66%, transparent), transparent 48%),
+    linear-gradient(145deg, var(--blue-soft), color-mix(in srgb, var(--sage) 73%, var(--paper)) 78%, var(--paper));
+  box-shadow: -7px 8px 0 color-mix(in srgb, var(--blue-strong) 14%, transparent), 0 22px 50px color-mix(in srgb, var(--rose-shadow) 20%, transparent);
+}
+.cover-book::before { background: color-mix(in srgb, var(--blue-strong) 34%, transparent); }
+.cover-book-kicker { max-width: 100%; line-height: 1.8; font-size: 10px; letter-spacing: .035em; }
+.cover-book strong { color: var(--ink); }
+.cover-toolbar { letter-spacing: .05em; }
+.reader-shell {
+  background: var(--paper);
+}
+.reader-shell:has(.reader-companion-bar) {
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+}
+.reader-header {
+  border-bottom-color: color-mix(in srgb, var(--sage) 80%, var(--line));
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+}
+.reader-companion-bar {
+  gap: 10px;
+  min-height: 45px;
+  padding: 7px max(14px, var(--safe-left)) 7px max(14px, var(--safe-right));
+  background: color-mix(in srgb, var(--blue-soft) 38%, var(--paper));
+  border-bottom-color: color-mix(in srgb, var(--line) 75%, transparent);
+  color: var(--ink);
+}
+.reader-companion-bar > span:not(.companion-presence-light) { flex: 1; min-width: 0; }
+.companion-presence-light {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #74ac87;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #74ac87 15%, transparent);
+}
+.reader-companion-bar button {
+  border-radius: 999px;
+  border-color: color-mix(in srgb, var(--blue-strong) 19%, var(--line));
+  padding: 7px 13px;
+  background: var(--surface);
+  color: var(--blue-strong);
+  font-weight: 720;
+}
+.reader-actions {
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
+}
+.novel-paper {
+  color: var(--ink);
+  letter-spacing: .018em;
+}
+.novel-paper mark, .quote-highlight { background: color-mix(in srgb, var(--champagne) 30%, transparent); }
+@media (max-width: 699px) {
+  .library-brandline { gap: 10px; margin-bottom: 11px; }
+  .library-brand-icon { width: 39px; height: 39px; border-radius: 13px; }
+  .library-brandline .library-kicker { font-size: 12px; }
+  .library-kicker small { font-size: 8px; letter-spacing: .1em; }
+  .library-header h1 { font-size: 37px; }
+  .library-promise { margin-top: 14px; padding: 7px 10px; font-size: 11px; }
+  .reader-companion-bar { min-height: 42px; padding: 6px 12px; font-size: 11px; }
+  .reader-companion-bar button { padding: 6px 11px; font-size: 11px; }
+  .cover-stage { border-radius: 19px; }
+  .continue-card { border-radius: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  button { transition: none; }
 }
