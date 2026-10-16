@@ -7,7 +7,7 @@ describe("server app", () => {
     const response = await request(createApp()).get("/health");
     expect(response.status).toBe(200);
     expect(response.headers["cache-control"]).toBe("no-store");
-    expect(response.body).toEqual({ ok: true, app: "鼠兔和家机的书屋", version: "0.3.35" });
+    expect(response.body).toEqual({ ok: true, app: "鼠鼠与纪清和的书屋", version: "0.3.36" });
   });
 
   it("accepts an MCP initialize request", async () => {
