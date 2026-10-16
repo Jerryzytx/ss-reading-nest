@@ -4,6 +4,7 @@ import {
   ArrowRight,
   ChevronLeft,
   ChevronRight,
+  Coffee,
   MessageCircleQuestion,
   PencilLine,
   Save,
@@ -304,20 +305,20 @@ export function NovelReader(props: {
       />
       <ReadingSyncStatus session={props.session} />
       {props.onToggleCompanionVoice ? (
-      <div className="reader-companion-bar" aria-label="陪读模式"><span className="companion-presence-light" aria-hidden="true" />
-        <span>
-          {props.companionVoice === "british_lady"
-            ? "纪清和 · 英国夫人陪读中"
-            : "纪清和 · 正在陪你读书"}
-        </span>
-        <button
-          type="button"
-          aria-pressed={props.companionVoice === "british_lady"}
-          onClick={props.onToggleCompanionVoice}
-        >
-          {props.companionVoice === "british_lady" ? "切回纪清和" : "请英国夫人"}
-        </button>
-      </div>
+        <div className={`reader-companion-bar${props.companionVoice === "british_lady" ? " is-lady" : ""}`} aria-label="陪读模式">
+          <span className="reader-companion-emblem" aria-hidden="true"><Coffee strokeWidth={1.5} /></span>
+          <span className="reader-companion-copy">
+            <strong>{props.companionVoice === "british_lady" ? "夫人已入座，茶已备好" : "纪清和 · 陪你读这一页"}</strong>
+            <small>{props.companionVoice === "british_lady" ? "恕不恭维，但我愿意听听。" : "PRIVATE READING · MOUSE & QINGHE"}</small>
+          </span>
+          <button
+            type="button"
+            aria-pressed={props.companionVoice === "british_lady"}
+            onClick={props.onToggleCompanionVoice}
+          >
+            {props.companionVoice === "british_lady" ? "夫人暂退" : "请夫人入座"}
+          </button>
+        </div>
       ) : null}
       <div className="reader-workspace novel-workspace">
         <div className="novel-reading-column">
@@ -665,7 +666,7 @@ export function NovelReader(props: {
         </div>
       </div>
       <ReaderActions
-        primaryLabel="和纪清和共读"
+        primaryLabel="与夫人共读"
         pageLabel={`${index + 1} / ${props.chunks.length}`}
         onPrimary={() => props.onSharePage(current)}
         primaryDisabled={props.actionInFlight}
