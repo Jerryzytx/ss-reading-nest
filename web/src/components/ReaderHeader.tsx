@@ -20,7 +20,7 @@ export function ReaderHeader(props: {
   onOpenNavigation?: () => void;
 }) {
   const fullscreenLabel = props.fullscreenLabel ?? "全屏阅读";
-  const isFullscreen = fullscreenLabel === "退出全屏";
+  const isFullscreen = fullscreenLabel === "退出全屏" || fullscreenLabel === "退出沉浸";
 
   return (
     <header className="reader-header">

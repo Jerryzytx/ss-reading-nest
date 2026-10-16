@@ -54,6 +54,23 @@ function selectText(text: string, anchorNode: Node) {
 }
 
 describe("NovelReader", () => {
+  it("opens a note editor when a mobile reader taps a paragraph", () => {
+    render(<NovelReader {...makeProps()} />);
+    fireEvent.click(screen.getByRole("button", { name: "点选段落批注" }));
+    fireEvent.click(screen.getByRole("button", { name: "第一句话。第二句话。" }));
+    expect(screen.getByRole("textbox", { name: "我的划线想法" })).toBeInTheDocument();
+  });
+
+  it("persists font size changes", () => {
+    localStorage.removeItem("estate-reader-font-size");
+    const { container } = render(<NovelReader {...makeProps()} />);
+    fireEvent.click(screen.getByRole("button", { name: "字号 18" }));
+    fireEvent.click(screen.getByRole("button", { name: "放大字号" }));
+    expect(screen.getByText("20px")).toBeInTheDocument();
+    expect(container.querySelector(".novel-paper")).toHaveStyle({ fontSize: "20px" });
+    expect(localStorage.getItem("estate-reader-font-size")).toBe("20");
+  });
+
   it("switches the estate tea companion between everyday and Lady Qinghe modes", () => {
     const onToggleCompanionVoice = vi.fn();
     const props = { ...makeProps(), onToggleCompanionVoice };
