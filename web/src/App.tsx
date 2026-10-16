@@ -354,7 +354,7 @@ export function App() {
 
   useEffect(() => {
     if (screen !== "novel") return;
-    setReaderImmersive(hostLayout.displayMode === "fullscreen");
+    if (hostLayout.displayMode === "fullscreen") setReaderImmersive(true);
   }, [hostLayout.displayMode, screen]);
 
   useEffect(() => {
@@ -597,17 +597,20 @@ export function App() {
         immersive,
         collapsed: false
       });
-    if (hostLayout.displayMode === "fullscreen") {
+    if (readerImmersive || hostLayout.displayMode === "fullscreen") {
       saveFullscreenIntent(false);
-      await requestReaderInline();
+      setReaderImmersive(false);
+      if (hostLayout.displayMode === "fullscreen") await requestReaderInline();
       return;
     }
     saveFullscreenIntent(true);
     setReaderCollapsed(false);
+    setReaderImmersive(true);
     const supported = await requestReaderFullscreen();
     if (!supported) {
-      saveFullscreenIntent(false);
-      setToast("无法进入全屏阅读，请重试。");
+      // The host controls its actual iframe/fullscreen capabilities.
+      // Keep a usable in-widget immersive layout rather than failing the action.
+      setToast("此客户端暂不支持系统全屏，已展开插件内沉浸阅读。");
     }
   }
 
@@ -1279,20 +1282,27 @@ export function App() {
   async function shareNovelPage(currentText: string) {
     if (!sessionBundle || syncRequestInFlight) return;
     const currentPosition = sessionBundle.session.userCurrentPosition;
+    // Send the reader's immediate narrative arc, not an isolated page.
+    const rangeStart = Math.max(1, currentPosition.index - 3);
+    const recentPages = chunks.slice(rangeStart - 1, currentPosition.index);
+    const includedText = recentPages
+      .map((page, offset) => `【第 ${rangeStart + offset} 页】\\n${page}`)
+      .join("\\n\\n").slice(-19_500);
     const savedThoughts = formatPageThoughts(
       sessionBundle.quotes.filter(
         (quote) =>
           quote.position.kind === currentPosition.kind &&
-          quote.position.index === currentPosition.index &&
+          quote.position.index >= rangeStart &&
+          quote.position.index <= currentPosition.index &&
           quote.note
       )
     );
     const sourceContext = getSourceContext(sessionBundle.session.sourceManifest);
     const prompt = [
-      `我刚读完《${sessionBundle.session.title}》的第 ${currentPosition.index} 页，想和你一起聊聊。`,
+      `我读到了《${sessionBundle.session.title}》第 ${currentPosition.index} 页。请把第 ${rangeStart} 页到这里连起来一起读、一起聊，不要只看孤立的这一页。`,
       savedThoughts
-        ? "请先读取我刚分享的这一页和保存的想法，直接回应我的想法，再聊你最有共鸣的 1-2 个点。"
-        : "请先读取我刚分享的这一页，挑最有意思的 1-3 个点自然地和我聊。",
+        ? "请先读取我刚分享的连续几页和保存的批注，接住我的想法，再聊你最在意的 1-2 个细节。"
+        : "请先读取刚分享的连续几页，结合前后情节一起聊，挑 1-3 个值得八卦的细节。",
       "不要复述正文、逐条转抄想法，也不要概括前面的内容。"
     ].join("\n");
     setSyncRequestInFlight(true);
@@ -1302,6 +1312,8 @@ export function App() {
         currentPosition,
         mode: "current_only",
         currentText,
+        includedText,
+        contextRange: { start: rangeStart, end: currentPosition.index },
         readingCommentMode: "light_chat",
         commentLength: "normal",
         ...(savedThoughts ? { userNote: savedThoughts.slice(0, 4_000) } : {}),
@@ -1328,7 +1340,7 @@ export function App() {
         sendMessage: sendCompanionMessage,
         scrollToBottom: false
       });
-      setToast("这一页和鼠鼠的想法已经发给纪清和。你可以继续往下读。");
+      setToast(`已把第 ${rangeStart}–${currentPosition.index} 页及批注同步给纪清和。`);
     } finally {
       setSyncRequestInFlight(false);
     }
@@ -2064,7 +2076,7 @@ export function App() {
           onDeleteQuote={(quoteId) => deleteQuoteRecord(sessionBundle.session.id, quoteId)}
           onFinish={finishToday}
           onFullscreen={() => void openFullscreenReader()}
-          fullscreenLabel={hostLayout.displayMode === "fullscreen" ? "退出全屏" : "全屏阅读"}
+          fullscreenLabel={readerImmersive || hostLayout.displayMode === "fullscreen" ? "退出沉浸" : "沉浸阅读"}
           immersive={readerImmersive}
           layoutRevision={hostLayout.revision}
           actionInFlight={syncRequestInFlight}
