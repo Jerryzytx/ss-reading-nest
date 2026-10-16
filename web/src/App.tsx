@@ -56,6 +56,12 @@ import {
   buildReadingCommentPrompt
 } from "./features/reading-comments/prompt-policy.js";
 import {
+  COMPANION_VOICE_STORAGE_KEY,
+  readCompanionVoice,
+  withCompanionVoice,
+  type CompanionVoice
+} from "./features/reading-comments/companion-voice.js";
+import {
   cancelSyncJob,
   getActiveBatch,
   markBatchConfirmed,
@@ -189,6 +195,18 @@ export function App() {
     restoredWidgetState?.immersive ?? false
   );
   const [librarySkin, setLibrarySkin] = useState<LibrarySkin>(readLibrarySkin);
+  const [companionVoice, setCompanionVoice] = useState<CompanionVoice>(readCompanionVoice);
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(COMPANION_VOICE_STORAGE_KEY, companionVoice);
+    } catch {
+      // Reading is still available in browsers that block persistent storage.
+    }
+  }, [companionVoice]);
+  const sendCompanionMessage = (
+    prompt: string,
+    options?: { scrollToBottom?: boolean }
+  ) => askChatGpt(withCompanionVoice(prompt, companionVoice), options);
   const [readerCollapsed, setReaderCollapsed] = useState(
     restoredWidgetState?.collapsed ?? false
   );
@@ -1245,8 +1263,8 @@ export function App() {
         }),
         fallbackMessagePrompt: fallbackPrompt,
         updateModelContext,
-        sendMessage: askChatGpt,
-        scrollToBottom: true
+        sendMessage: sendCompanionMessage,
+        scrollToBottom: false
       });
       setToast(
         mode === "context"
@@ -1307,8 +1325,8 @@ export function App() {
           savedThoughts
         }),
         updateModelContext,
-        sendMessage: askChatGpt,
-        scrollToBottom: true
+        sendMessage: sendCompanionMessage,
+        scrollToBottom: false
       });
       setToast("这一页和鼠鼠的想法已经发给家机。你可以继续往下读。");
     } finally {
@@ -1355,8 +1373,8 @@ export function App() {
           `划线原文：“${selectedText.trim()}”`
         ].join("\n"),
         updateModelContext,
-        sendMessage: askChatGpt,
-        scrollToBottom: true
+        sendMessage: sendCompanionMessage,
+        scrollToBottom: false
       });
       setToast("只把这句和鼠鼠的问题发给了家机。");
     } finally {
@@ -1426,7 +1444,7 @@ export function App() {
           hasMore: !batch.isFinal
         }
       });
-      await askChatGpt(buildBatchChatMessage(job, batch), { scrollToBottom: false });
+      await sendCompanionMessage(buildBatchChatMessage(job, batch), { scrollToBottom: false });
       const sent = markBatchSent(job, batch.id);
       storeSyncJob(sent);
       await cache.putSyncJob(sent).catch(() => undefined);
@@ -1491,7 +1509,7 @@ export function App() {
               source: "catch_up_complete",
               operationId: formalOperationId
       });
-      void askChatGpt(prompt, { scrollToBottom: false }).catch(() => {
+      void sendCompanionMessage(prompt, { scrollToBottom: false }).catch(() => {
         setToast("正式共读回应没有发送成功，请重试。");
       });
       clearSyncJobState();
@@ -1514,7 +1532,7 @@ export function App() {
       .map((chunk, offset) => `【第 ${start + offset} 页】\n${chunk}`)
       .join("\n\n");
     setSyncChoiceOpen(false);
-    await askChatGpt(
+    await sendCompanionMessage(
       buildRecentOnlyPrompt({
         sessionId: sessionBundle.session.id,
         title: sessionBundle.session.title,
@@ -1602,7 +1620,7 @@ export function App() {
             hasMore: false
           }
         });
-        await askChatGpt(
+        await sendCompanionMessage(
           buildLiveReadingPrompt({
             sessionId: sessionBundle.session.id,
             title: session.title,
@@ -2034,6 +2052,10 @@ export function App() {
           session={sessionBundle.session}
           chunks={chunks}
           savedQuotes={sessionBundle.quotes}
+          companionVoice={companionVoice}
+          onToggleCompanionVoice={() =>
+            setCompanionVoice((current) => current === "regular" ? "british_lady" : "regular")
+          }
           onPosition={changePosition}
           onSharePage={shareNovelPage}
           onAskSelection={askAboutNovelSelection}
