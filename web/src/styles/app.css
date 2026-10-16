@@ -1173,7 +1173,7 @@ html[data-display-mode="fullscreen"] .app {
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 7px 12px;
-  color: var(--text);
+  color: var(--ink);
   background: var(--surface);
   font-size: 12px;
 }
