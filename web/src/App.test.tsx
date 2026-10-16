@@ -274,7 +274,7 @@ describe("App", () => {
     expect(await screen.findByText("第二页。")).toBeInTheDocument();
     expect(requestDisplayMode).not.toHaveBeenCalled();
 
-    fireEvent.click(screen.getByRole("button", { name: "全屏阅读" }));
+    fireEvent.click(screen.getByRole("button", { name: "沉浸阅读" }));
     await waitFor(() => {
       expect(requestDisplayMode).toHaveBeenCalledWith({ mode: "fullscreen" });
     });
@@ -851,7 +851,7 @@ describe("App", () => {
         })
       );
       expect(requestDisplayMode).not.toHaveBeenCalledWith({ mode: "fullscreen" });
-      expect(screen.getByRole("button", { name: "全屏阅读" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "沉浸阅读" })).toBeInTheDocument();
       expect(setWidgetState).toHaveBeenCalledWith(
         expect.objectContaining({
           screen: "novel",
@@ -860,11 +860,11 @@ describe("App", () => {
         })
       );
     });
-    fireEvent.click(screen.getByRole("button", { name: "全屏阅读" }));
+    fireEvent.click(screen.getByRole("button", { name: "沉浸阅读" }));
     await waitFor(() => {
       expect(requestDisplayMode).toHaveBeenCalledWith({ mode: "fullscreen" });
     });
-    expect(screen.getByRole("button", { name: "全屏阅读" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "沉浸阅读" })).toBeInTheDocument();
     window.dispatchEvent(
       new CustomEvent("openai:host-context-changed", {
         detail: {
@@ -873,14 +873,14 @@ describe("App", () => {
         }
       })
     );
-    expect(await screen.findByRole("button", { name: "退出全屏" })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "退出沉浸" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "悬浮阅读" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "悬浮阅读" }));
     await waitFor(() => {
       expect(requestDisplayMode).toHaveBeenCalledWith({ mode: "pip" });
     });
     await waitFor(() => {
-      expect(screen.getByRole("button", { name: "退出全屏" }).closest("main")).toHaveClass(
+      expect(screen.getByRole("button", { name: "退出沉浸" }).closest("main")).toHaveClass(
         "reader-immersive"
       );
     });
@@ -890,7 +890,7 @@ describe("App", () => {
     });
     visualViewport.dispatchEvent(new Event("resize"));
     expect(requestDisplayMode).not.toHaveBeenCalledWith({ mode: "inline" });
-    fireEvent.click(screen.getByRole("button", { name: "退出全屏" }));
+    fireEvent.click(screen.getByRole("button", { name: "退出沉浸" }));
     await waitFor(() => {
       expect(requestDisplayMode).toHaveBeenCalledWith({ mode: "inline" });
     });
@@ -902,7 +902,7 @@ describe("App", () => {
         }
       })
     );
-    expect(await screen.findByRole("button", { name: "全屏阅读" })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "沉浸阅读" })).toBeInTheDocument();
     expect(screen.getByText("这是 GPT 必须看到的当前段落。")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "和纪清和共读" }));
 
@@ -1867,12 +1867,12 @@ describe("App", () => {
     expect(await screen.findByText("第三段。")).toBeInTheDocument();
     expect(setWidgetState).not.toHaveBeenCalledWith(expect.objectContaining({ screen: "home" }));
 
-    fireEvent.click(screen.getByRole("button", { name: "全屏阅读" }));
+    fireEvent.click(screen.getByRole("button", { name: "沉浸阅读" }));
 
     await waitFor(() => {
       expect(requestDisplayMode).toHaveBeenCalledWith({ mode: "fullscreen" });
     });
-    expect(screen.getByRole("button", { name: "全屏阅读" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "沉浸阅读" })).toBeInTheDocument();
 
     if (window.openai) {
       window.openai.hostContext = {
@@ -1885,7 +1885,7 @@ describe("App", () => {
         detail: { displayMode: "fullscreen", availableDisplayModes: ["inline", "fullscreen"] }
       })
     );
-    expect(await screen.findByRole("button", { name: "退出全屏" })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "退出沉浸" })).toBeInTheDocument();
     await waitFor(() => {
       expect(setWidgetState).toHaveBeenCalledWith(
         expect.objectContaining({ screen: "novel", sessionId, positionIndex: 3, immersive: true })
@@ -1897,9 +1897,9 @@ describe("App", () => {
     render(<App />);
 
     expect(await screen.findByText("第三段。")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "退出全屏" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "退出沉浸" })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "退出全屏" }));
+    fireEvent.click(screen.getByRole("button", { name: "退出沉浸" }));
     await waitFor(() => {
       expect(requestDisplayMode).toHaveBeenCalledWith({ mode: "inline" });
     });
@@ -1914,12 +1914,12 @@ describe("App", () => {
         detail: { displayMode: "inline", availableDisplayModes: ["inline", "fullscreen"] }
       })
     );
-    expect(await screen.findByRole("button", { name: "全屏阅读" })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "沉浸阅读" })).toBeInTheDocument();
 
     requestDisplayMode.mockRejectedValueOnce(new Error("host rejected fullscreen"));
-    fireEvent.click(screen.getByRole("button", { name: "全屏阅读" }));
+    fireEvent.click(screen.getByRole("button", { name: "沉浸阅读" }));
     await waitFor(() => {
-      expect(screen.getByRole("button", { name: "全屏阅读" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "沉浸阅读" })).toBeInTheDocument();
       expect(setWidgetState).toHaveBeenLastCalledWith(
         expect.objectContaining({ screen: "novel", sessionId, immersive: false })
       );
