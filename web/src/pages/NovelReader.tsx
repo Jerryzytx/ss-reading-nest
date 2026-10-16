@@ -378,9 +378,12 @@ export function NovelReader(props: {
                 className={tapToQuote && line.trim() ? "reader-annotatable-paragraph" : undefined}
                 role={tapToQuote && line.trim() ? "button" : undefined}
                 tabIndex={tapToQuote && line.trim() ? 0 : undefined}
-                onClick={tapToQuote ? () => selectParagraph(line) : undefined}
+                onClick={tapToQuote ? (event) => {
+                  if ((event.target as HTMLElement).closest(".quote-highlight")) return;
+                  selectParagraph(line);
+                } : undefined}
                 onKeyDown={tapToQuote ? (event) => {
-                  if (event.key === "Enter" || event.key === " ") { event.preventDefault(); selectParagraph(line); }
+                  if (event.target === event.currentTarget && (event.key === "Enter" || event.key === " ")) { event.preventDefault(); selectParagraph(line); }
                 } : undefined}
               >{highlightLine(line, currentQuotes, openQuoteDetail)}</p>
             ))}
