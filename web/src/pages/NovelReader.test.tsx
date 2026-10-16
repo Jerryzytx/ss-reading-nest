@@ -54,6 +54,20 @@ function selectText(text: string, anchorNode: Node) {
 }
 
 describe("NovelReader", () => {
+  it("normalizes whitespace in a tapped paragraph before saving the note", async () => {
+    const props = { ...makeProps(), chunks: ["第一句话。  第二句话。", "下一页。"] };
+    render(<NovelReader {...props} />);
+    fireEvent.click(screen.getByRole("button", { name: "点选段落批注" }));
+    fireEvent.click(screen.getByRole("button", { name: "第一句话。 第二句话。" }));
+    fireEvent.change(screen.getByRole("textbox", { name: "我的划线想法" }), {
+      target: { value: "这一段很有意思" }
+    });
+    fireEvent.click(screen.getByRole("button", { name: "存入本页想法" }));
+    await waitFor(() => {
+      expect(props.onSaveThought).toHaveBeenCalledWith("第一句话。 第二句话。", "这一段很有意思");
+    });
+  });
+
   it("opens a note editor when a mobile reader taps a paragraph", () => {
     render(<NovelReader {...makeProps()} />);
     fireEvent.click(screen.getByRole("button", { name: "点选段落批注" }));

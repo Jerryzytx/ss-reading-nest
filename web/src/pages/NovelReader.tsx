@@ -153,7 +153,7 @@ export function NovelReader(props: {
   }
 
   function selectParagraph(text: string) {
-    const clean = text.replace(/\\s+/g, " ").trim().slice(0, 10_000);
+    const clean = text.replace(/\s+/g, " ").trim().slice(0, 10_000);
     if (!clean) return;
     const existing = currentQuotes.find((quote) => normalizeQuote(quote.content) === clean);
     setSelected(clean);

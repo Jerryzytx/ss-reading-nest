@@ -1,5 +1,5 @@
-export const READING_NEST_APP_VERSION = "0.3.38";
+export const READING_NEST_APP_VERSION = "0.3.39";
 // Use the proven self-contained resource transport for native ChatGPT hosts.
-export const READING_NEST_RESOURCE_VERSION = "app-v87-co-reading-accessibility";
+export const READING_NEST_RESOURCE_VERSION = "app-v88-paragraph-selection";
 export const READING_NEST_RESOURCE_URI =
   `ui://ss-reading-nest/${READING_NEST_RESOURCE_VERSION}.html` as const;

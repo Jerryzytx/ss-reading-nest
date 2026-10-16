@@ -39,6 +39,7 @@ import { toolResult } from "./tool-result.js";
 // previous connection can still fetch its template after a later app release.
 export const READING_NEST_URI = READING_NEST_RESOURCE_URI;
 export const READING_NEST_LEGACY_URIS = [
+  "ui://ss-reading-nest/app-v87-co-reading-accessibility.html",
   "ui://ss-reading-nest/app-v86-elegance-arts-estate.html",
   "ui://ss-reading-nest/app-v85-mouse-qinghe-reading-room.html",
   "ui://ss-reading-nest/app-v84-pinned-reader-companion.html",
