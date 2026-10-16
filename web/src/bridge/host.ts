@@ -19,7 +19,7 @@ export interface UnavailableToolResult {
   _meta?: Record<string, unknown>;
 }
 
-export const NO_HOST_MESSAGE = "请在 ChatGPT 内打开书屋后再使用家机陪读功能。";
+export const NO_HOST_MESSAGE = "请在 ChatGPT 内打开书屋后再使用纪清和陪读功能。";
 
 export function detectHostEnvironment(): HostEnvironment {
   if (typeof window === "undefined") return "no-host";
@@ -80,7 +80,7 @@ function connectApp() {
   if (!app) {
     try {
       const nextApp = new McpApp({
-        name: "鼠兔和家机的书屋",
+        name: "鼠鼠与纪清和的书屋",
         version: READING_NEST_APP_VERSION
       });
       // This must be registered before connect(); the host can deliver the opening

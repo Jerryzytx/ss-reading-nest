@@ -304,18 +304,18 @@ export function NovelReader(props: {
       />
       <ReadingSyncStatus session={props.session} />
       {props.onToggleCompanionVoice ? (
-      <div className="reader-companion-bar" aria-label="陪读模式">
+      <div className="reader-companion-bar" aria-label="陪读模式"><span className="companion-presence-light" aria-hidden="true" />
         <span>
           {props.companionVoice === "british_lady"
-            ? "☕ 英国夫人正在陪你读书"
-            : "小纪正在陪你读书"}
+            ? "纪清和 · 英国夫人陪读中"
+            : "纪清和 · 正在陪你读书"}
         </span>
         <button
           type="button"
           aria-pressed={props.companionVoice === "british_lady"}
           onClick={props.onToggleCompanionVoice}
         >
-          {props.companionVoice === "british_lady" ? "切回小纪" : "请英国夫人"}
+          {props.companionVoice === "british_lady" ? "切回纪清和" : "请英国夫人"}
         </button>
       </div>
       ) : null}
@@ -389,7 +389,7 @@ export function NovelReader(props: {
             ) : (
               <div className="selection-composer">
                 <label htmlFor="selection-draft">
-                  {selectionMode === "thought" ? "我的想法" : "我想问家机"}
+                  {selectionMode === "thought" ? "我的想法" : "我想问纪清和"}
                 </label>
                 <textarea
                   id="selection-draft"
@@ -419,7 +419,7 @@ export function NovelReader(props: {
                     onClick={() => void submitQuestion()}
                   >
                     <Send aria-hidden="true" strokeWidth={1.8} />
-                    {submitting ? "正在处理…" : "立即问家机"}
+                    {submitting ? "正在处理…" : "立即问纪清和"}
                   </button>
                 </div>
               </div>
@@ -538,7 +538,7 @@ export function NovelReader(props: {
                     <textarea
                       value={clearThoughtDraft}
                       onChange={(event) => setClearThoughtDraft(event.target.value)}
-                      placeholder="粘贴家机说得好的地方，或写下聊完之后真正想清楚的内容…"
+                      placeholder="粘贴纪清和说得好的地方，或写下聊完之后真正想清楚的内容…"
                     />
                   ) : (
                     <p className="quote-clear-thought-body">
@@ -665,7 +665,7 @@ export function NovelReader(props: {
         </div>
       </div>
       <ReaderActions
-        primaryLabel="和家机共读"
+        primaryLabel="和纪清和共读"
         pageLabel={`${index + 1} / ${props.chunks.length}`}
         onPrimary={() => props.onSharePage(current)}
         primaryDisabled={props.actionInFlight}

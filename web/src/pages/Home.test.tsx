@@ -41,6 +41,8 @@ describe("Home novel bookshelf", () => {
     const { container } = renderHome();
 
     expect(screen.getAllByRole("button", { name: "我的书房" }).length).toBeGreaterThan(0);
+    expect(screen.getByRole("heading", { name: "我们的书房" })).toBeInTheDocument();
+    expect(screen.getByText("鼠鼠负责翻书，纪清和负责陪你胡思乱想。")).toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: "阅读记录" }).length).toBeGreaterThan(0);
     expect(container.querySelectorAll("svg.library-rail-icon")).toHaveLength(2);
     expect(container).not.toHaveTextContent("▣");

@@ -499,6 +499,6 @@ describe("Host capability model (Phase 3A.1)", () => {
 
   it("exposes the required no-host message", async () => {
     const { NO_HOST_MESSAGE } = await import("./host.js");
-    expect(NO_HOST_MESSAGE).toBe("请在 ChatGPT 内打开书屋后再使用家机陪读功能。");
+    expect(NO_HOST_MESSAGE).toBe("请在 ChatGPT 内打开书屋后再使用纪清和陪读功能。");
   });
 });
