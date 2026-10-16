@@ -135,31 +135,22 @@ describe("host bridge", () => {
     });
   });
 
-  it("prefers the MCP Apps bridge inside the ChatGPT component iframe", async () => {
+  it("prefers the native ChatGPT follow-up bridge in an iframe when supported", async () => {
     const sendFollowUpMessage = vi.fn().mockResolvedValue(undefined);
     if (window.openai) window.openai.sendFollowUpMessage = sendFollowUpMessage;
     const { askChatGpt } = await import("./host.js");
-
     await askChatGpt("陪我看看这里", { scrollToBottom: false });
-
-    expect(bridge.sendMessage).toHaveBeenCalledWith({
-      role: "user",
-      content: [{ type: "text", text: "陪我看看这里" }]
-    });
-    expect(sendFollowUpMessage).not.toHaveBeenCalled();
+    expect(sendFollowUpMessage).toHaveBeenCalledWith({ prompt: "陪我看看这里", scrollToBottom: false });
+    expect(bridge.sendMessage).not.toHaveBeenCalled();
   });
 
-  it("falls back to the native follow-up bridge when MCP Apps send fails", async () => {
-    bridge.sendMessage.mockRejectedValueOnce(new Error("MCP Apps send unavailable"));
-    const sendFollowUpMessage = vi.fn().mockResolvedValue(undefined);
+  it("falls back to MCP Apps when the native follow-up bridge fails", async () => {
+    const sendFollowUpMessage = vi.fn().mockRejectedValue(new Error("native send unavailable"));
     if (window.openai) window.openai.sendFollowUpMessage = sendFollowUpMessage;
     const { askChatGpt } = await import("./host.js");
-
     await askChatGpt("陪我看看这里", { scrollToBottom: false });
-
-    expect(sendFollowUpMessage).toHaveBeenCalledWith({
-      prompt: "陪我看看这里",
-      scrollToBottom: false
+    expect(bridge.sendMessage).toHaveBeenCalledWith({
+      role: "user", content: [{ type: "text", text: "陪我看看这里" }]
     });
   });
 
